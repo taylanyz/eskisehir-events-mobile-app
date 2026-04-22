@@ -4,6 +4,10 @@ import com.eskisehir.eventapi.domain.model.Category;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Request DTO for the recommendation endpoint.
+ * Contains user preferences for POI scoring.
+ */
 public class RecommendationRequest {
 
     @NotNull(message = "Preferred categories must not be null")

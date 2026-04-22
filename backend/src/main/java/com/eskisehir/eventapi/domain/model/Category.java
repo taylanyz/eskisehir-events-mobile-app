@@ -15,6 +15,13 @@ public enum Category {
     STANDUP("Stand-up"),
     CINEMA("Sinema"),
     CONFERENCE("Konferans"),
+    CAFE("Kafe"),
+    RESTAURANT("Restoran"),
+    PARK("Park"),
+    MUSEUM("Müze"),
+    HISTORICAL("Tarihi Mekan"),
+    RIVERSIDE("Nehir Kenarı"),
+    CULTURAL("Kültürel"),
     OTHER("Diğer");
 
     private final String displayNameTr;

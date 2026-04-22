@@ -18,11 +18,12 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+
     /**
-     * Handles EventNotFoundException → 404 Not Found.
+     * Handles PoiNotFoundException → 404 Not Found.
      */
-    @ExceptionHandler(EventNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleEventNotFound(EventNotFoundException ex) {
+    @ExceptionHandler(PoiNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlePoiNotFound(PoiNotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND.value());
