@@ -2,3 +2,24 @@
 .idea/
 *.iml
 .DS_Store
+
+# Backend - Maven build outputs
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.log
+
+# Mobile - Gradle build outputs
+mobile/.gradle/
+mobile/build/
+mobile/.gradle
+mobile/local.properties
+
+# IDE
+*.swp
+*.swo
+*~
+.classpath
+.project
+.settings/
