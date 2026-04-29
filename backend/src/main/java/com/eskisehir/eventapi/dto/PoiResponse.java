@@ -30,12 +30,18 @@ public class PoiResponse {
     private Double localBusinessScore;
     private Double crowdProxy;
     private Double popularityScore;
+    private Double rankingScore;
     private LocalTime openingTime;
     private LocalTime closingTime;
+    private WeatherDto weather;
 
     public PoiResponse() {}
 
     public static PoiResponse fromEntity(Poi poi) {
+        return fromEntity(poi, null);
+    }
+
+    public static PoiResponse fromEntity(Poi poi, Double rankingScore) {
         PoiResponse r = new PoiResponse();
         r.setId(poi.getId());
         r.setName(poi.getName());
@@ -57,6 +63,7 @@ public class PoiResponse {
         r.setLocalBusinessScore(poi.getLocalBusinessScore());
         r.setCrowdProxy(poi.getCrowdProxy());
         r.setPopularityScore(poi.getPopularityScore());
+        r.setRankingScore(rankingScore);
         r.setOpeningTime(poi.getOpeningTime());
         r.setClosingTime(poi.getClosingTime());
         return r;
@@ -103,8 +110,12 @@ public class PoiResponse {
     public void setCrowdProxy(Double crowdProxy) { this.crowdProxy = crowdProxy; }
     public Double getPopularityScore() { return popularityScore; }
     public void setPopularityScore(Double popularityScore) { this.popularityScore = popularityScore; }
+    public Double getRankingScore() { return rankingScore; }
+    public void setRankingScore(Double rankingScore) { this.rankingScore = rankingScore; }
     public LocalTime getOpeningTime() { return openingTime; }
     public void setOpeningTime(LocalTime openingTime) { this.openingTime = openingTime; }
     public LocalTime getClosingTime() { return closingTime; }
     public void setClosingTime(LocalTime closingTime) { this.closingTime = closingTime; }
+    public WeatherDto getWeather() { return weather; }
+    public void setWeather(WeatherDto weather) { this.weather = weather; }
 }

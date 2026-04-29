@@ -73,6 +73,10 @@ public class RecommendationService {
                 .collect(Collectors.toList());
     }
 
+    public List<Poi> getAllActivePois() {
+        return poiRepository.findByIsActiveTrue();
+    }
+
     /**
      * V1 scoring: rule-based.
      *   - Category match: +3 points

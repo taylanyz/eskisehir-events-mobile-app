@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.eskisehir.eventapp.data.model.SampleData
+import com.eskisehir.eventapp.ui.components.WeatherCard
 
 /**
  * Event Detail Screen - Shows full event information.

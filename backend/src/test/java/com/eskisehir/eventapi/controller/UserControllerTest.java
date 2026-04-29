@@ -6,12 +6,14 @@ import com.eskisehir.eventapi.dto.PreferenceUpdateRequest;
 import com.eskisehir.eventapi.dto.RegisterRequest;
 import com.eskisehir.eventapi.domain.model.Category;
 import com.eskisehir.eventapi.domain.model.SensitivityLevel;
+import com.eskisehir.eventapi.config.TestApplicationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(TestApplicationConfig.class)
 @ActiveProfiles("test")
 public class UserControllerTest {
 

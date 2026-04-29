@@ -2,7 +2,9 @@ package com.eskisehir.eventapi.controller;
 
 import com.eskisehir.eventapi.domain.model.Category;
 import com.eskisehir.eventapi.dto.PoiResponse;
+import com.eskisehir.eventapi.dto.AdvancedFilterRequest;
 import com.eskisehir.eventapi.service.PoiService;
+import com.eskisehir.eventapi.service.AdvancedFilterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 /**
  * REST controller for POI (Point of Interest) operations.
  * Handles listing, filtering, searching, and detail retrieval.
+ * Phase 5.3: Adds advanced filtering by price, distance, ratings, etc.
  */
 @RestController
 @RequestMapping("/api/pois")
@@ -19,9 +22,11 @@ import java.util.stream.Collectors;
 public class PoiController {
 
     private final PoiService poiService;
+    private final AdvancedFilterService advancedFilterService;
 
-    public PoiController(PoiService poiService) {
+    public PoiController(PoiService poiService, AdvancedFilterService advancedFilterService) {
         this.poiService = poiService;
+        this.advancedFilterService = advancedFilterService;
     }
 
     /**
@@ -49,6 +54,19 @@ public class PoiController {
                     .collect(Collectors.toList());
         }
 
+        return ResponseEntity.ok(pois);
+    }
+
+    /**
+     * POST /api/pois/filter
+     * Advanced filtering with multiple criteria (price, distance, rating, etc).
+     * Phase 5.3 Feature.
+     */
+    @PostMapping("/filter")
+    public ResponseEntity<List<PoiResponse>> advancedFilter(@RequestBody AdvancedFilterRequest request) {
+        List<PoiResponse> pois = advancedFilterService.applyFilters(request).stream()
+                .map(PoiResponse::fromEntity)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(pois);
     }
 

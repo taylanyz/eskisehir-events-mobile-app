@@ -7,6 +7,7 @@ package com.eskisehir.eventapi.domain.model;
 public enum InteractionType {
     VIEW(0.1),
     CLICK(0.2),
+    SHARE(0.3),
     SAVE(0.4),
     ADD_TO_ROUTE(0.6),
     VISITED(0.8),

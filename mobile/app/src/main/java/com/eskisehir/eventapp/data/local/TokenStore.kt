@@ -6,8 +6,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+
+private const val TOKEN_STORE_NAME = "auth_tokens"
 
 /**
  * TokenStore manages secure token storage using DataStore.
@@ -15,16 +18,16 @@ import kotlinx.coroutines.flow.map
  */
 class TokenStore(private val context: Context) {
 
+    private val dataStore: DataStore<Preferences>
+        get() = context.tokenStore
+
     companion object {
-        private const val TOKEN_STORE_NAME = "auth_tokens"
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
         private val USER_ID_KEY = stringPreferencesKey("user_id")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val DISPLAY_NAME_KEY = stringPreferencesKey("display_name")
     }
-
-    private val dataStore: DataStore<Preferences> by preferencesDataStore(name = TOKEN_STORE_NAME)
 
     val accessTokenFlow: Flow<String?> = dataStore.data.map { preferences ->
         preferences[ACCESS_TOKEN_KEY]
@@ -75,9 +78,8 @@ class TokenStore(private val context: Context) {
     }
 
     suspend fun getAccessToken(): String? {
-        val preferences = dataStore.data.map { it[ACCESS_TOKEN_KEY] }
-        return preferences.map { it }.first { true }
+        return dataStore.data.map { it[ACCESS_TOKEN_KEY] }.firstOrNull()
     }
 }
 
-private val Context.tokenStore: DataStore<Preferences> by preferencesDataStore(name = "auth_tokens")
+private val Context.tokenStore: DataStore<Preferences> by preferencesDataStore(name = TOKEN_STORE_NAME)

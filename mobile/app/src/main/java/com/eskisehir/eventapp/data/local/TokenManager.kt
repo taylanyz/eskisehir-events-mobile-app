@@ -2,6 +2,7 @@ package com.eskisehir.eventapp.data.local
 
 import com.eskisehir.eventapp.data.model.AuthResponse
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 
 /**
  * TokenManager provides high-level token management operations.
@@ -29,7 +30,7 @@ class TokenManager(private val tokenStore: TokenStore) {
         return tokenStore.getAccessToken()
     }
 
-    suspend fun getRefreshToken(): String? = tokenStore.refreshTokenFlow.map { it }.first { true }
+    suspend fun getRefreshToken(): String? = tokenStore.refreshTokenFlow.firstOrNull()
 
     suspend fun updateAccessToken(accessToken: String) {
         tokenStore.updateAccessToken(accessToken)
@@ -42,15 +43,4 @@ class TokenManager(private val tokenStore: TokenStore) {
     suspend fun isUserLoggedIn(): Boolean {
         return getAccessToken() != null
     }
-}
-
-private suspend fun <T> Flow<T>.first(predicate: suspend (T) -> Boolean): T? {
-    var result: T? = null
-    this.collect { value ->
-        if (predicate(value)) {
-            result = value
-            return@collect
-        }
-    }
-    return result
 }
