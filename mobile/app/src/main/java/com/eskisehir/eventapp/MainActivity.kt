@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.android.AndroidEntryPoint
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -19,25 +20,40 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.eskisehir.eventapp.data.local.TokenManager
+import com.eskisehir.eventapp.navigation.RootNavigation
 import com.eskisehir.eventapp.navigation.Screen
 import com.eskisehir.eventapp.ui.screens.detail.EventDetailScreen
 import com.eskisehir.eventapp.ui.screens.explore.ExploreScreen
 import com.eskisehir.eventapp.ui.screens.favorites.FavoritesScreen
 import com.eskisehir.eventapp.ui.screens.home.HomeScreen
 import com.eskisehir.eventapp.ui.screens.profile.ProfileScreen
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    
+    @Inject
+    lateinit var tokenManager: TokenManager
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                MainApp()
+                RootNavigation(tokenManager)
             }
         }
     }
 }
 
+/*
+ * Legacy code - kept for reference
+ * Bottom navigation now handled in AppNavGraph
+ */
+
 /** Bottom navigation tab definition */
+/*
 data class BottomNavItem(val screen: Screen, val icon: ImageVector, val label: String)
 
 val bottomNavItems = listOf(
@@ -120,3 +136,4 @@ fun MainApp() {
         }
     }
 }
+*/
