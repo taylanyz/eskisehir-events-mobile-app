@@ -1,470 +1,567 @@
-Merhaba, NEXT_PHASES_ROADMAP.md dosyasını okudum. 
-PHASE 2.5 Mobile Authentication ile başlamak istiyorum, işlemlerine başla.
+# Eskişehir Events Mobile App
 
-# Eskişehir Events Mobile App - Sonraki Fazlar Yol Haritası & Prompt
+## Phase 5 Sonrası Tez Odaklı Yol Haritası
 
-## 📋 Proje Durumu (22 Nisan 2026)
+Bu doküman, mevcut Kotlin + Jetpack Compose mobil istemci ve Spring Boot backend mimarisini koruyarak, Phase 5 sonrasındaki geliştirmeleri tez kalitesinde, akademik olarak savunulabilir ve üretim mantığıyla sürdürülebilir hale getirmek için güncellenmiştir.
 
-### ✅ Tamamlanan:
-- **Phase 1**: Data Model (User, POI, Route, Events, Feedback entities)
-- **Phase 2**: Backend Authentication & User System
-  - JWT token management (access + refresh)
-  - User registration, login
-  - User preferences management
-  - 15 integration test (ALL PASSING)
-  - Environment variable externalization
-- **Phase 2.5**: Mobile Integration Documentation & API Contract
-  - PHASE2_5_MOBILE_INTEGRATION.md - Complete API specification
-  - DTO models, endpoint examples, Bearer token pattern
+## 1. Stratejik Çerçeve
 
-### ⏳ Yapılması Gereken (Sırasıyla):
+### Proje Başlığı
+Mobile-Based Intelligent Tourism Application: AI-Supported Personalized Route Planning System
 
----
+### Proje Hedefi
+Kullanıcının ilgi alanları, bütçesi, zamanı, ulaşım tercihi, kalabalık toleransı, sürdürülebilirlik beklentisi ve bağlamsal verilerine göre Eskişehir odaklı kişiselleştirilmiş öneriler ve dinamik rota planları üretmek.
 
-## PHASE 2.5 - MOBILE APP AUTHENTICATION INTEGRATION
-**Priority**: 🔴 CRITICAL (Blocker for other mobile features)
-**Estimated Duration**: 3-4 days
-**Dependencies**: Phase 2 Backend (DONE)
+### Temel Farklılaştırıcılar
+- AI destekli kişiselleştirme
+- Statik öneri yerine dinamik rota üretimi
+- Çok kriterli rota optimizasyonu
+- Sürdürülebilirlik farkındalığı
+- Kalabalıktan kaçınma
+- Yerel işletmeleri öne çıkarma
+- Kullanıcı etkileşimlerinden ve metinsel geri bildirimlerden öğrenme
 
-### 2.5.1 - Mobile Project Structure Setup
-- [ ] Verify Kotlin/Jetpack Compose project structure
-- [ ] Check build.gradle.kts dependencies (Retrofit, OkHttp, Moshi/Gson, coroutines)
-- [ ] Set up build variants for dev/prod environments
-- [ ] Create app-level build configuration with API base URLs
+### Lokalizasyon Kuralları
+- Mobil uygulamadaki tüm görünür metinler Türkçe olacak.
+- İlk tam model şehir Eskişehir olacak.
+- POI örnekleri, senaryolar, seed data ve rota örnekleri Eskişehir merkezli hazırlanacak.
+- Backend kodu, mimari belgeler ve teknik açıklamalar İngilizce olabilir.
+- Domain modeli başka şehirlere genişleyebilecek şekilde tasarlanacak.
 
-### 2.5.2 - DTO Models Implementation
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/data/model/`
-- [ ] Create `AuthResponse.kt` data class
-- [ ] Create `UserResponse.kt` data class
-- [ ] Create `RegisterRequest.kt` data class
-- [ ] Create `LoginRequest.kt` data class
-- [ ] Create `RefreshTokenRequest.kt` data class
-- [ ] Create `PreferenceUpdateRequest.kt` data class
-- [ ] Add @Parcelize annotations for navigation argument passing
-- [ ] Reference: PHASE2_5_MOBILE_INTEGRATION.md for exact field definitions
+### Sabit Teknoloji Yığını
 
-### 2.5.3 - Retrofit API Service
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/data/remote/`
-- [ ] Create `AuthApi.kt` interface with 3 endpoints:
-  - `@POST("auth/register")` with RegisterRequest
-  - `@POST("auth/login")` with LoginRequest
-  - `@POST("auth/refresh")` with RefreshTokenRequest
-- [ ] Create `UserApi.kt` interface with 2 endpoints:
-  - `@GET("users/me")` 
-  - `@PUT("users/preferences")` with PreferenceUpdateRequest
-- [ ] Add error response handling (ErrorResponse DTO for 400/401/409/404)
-- [ ] Configure Retrofit with base URL from BuildConfig
+#### Mobile
+- Kotlin
+- Jetpack Compose
+- MVVM
+- Retrofit / OkHttp
+- Coroutines / Flow
+- Room veya DataStore gereken yerlerde
 
-### 2.5.4 - Local Token Storage
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/data/local/`
-- [ ] Create `TokenStore.kt` using DataStore<Preferences>
-  - Store: accessToken, refreshToken, userId, email, displayName
-  - Use encrypted DataStore for security
-- [ ] Create `TokenManager.kt` with methods:
-  - `saveTokens(authResponse: AuthResponse)`
-  - `getAccessToken(): String?`
-  - `getRefreshToken(): String?`
-  - `clearTokens()`
-  - `isUserLoggedIn(): Boolean`
-
-### 2.5.5 - Authentication Service (Business Logic)
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/domain/usecase/`
-- [ ] Create `RegisterUseCase.kt`
-- [ ] Create `LoginUseCase.kt`
-- [ ] Create `RefreshTokenUseCase.kt`
-- [ ] Create `LogoutUseCase.kt` (clear local storage)
-- [ ] Create `GetCurrentUserUseCase.kt`
-- [ ] Create `UpdatePreferencesUseCase.kt`
-- [ ] All should return `Result<T>` sealed class for error handling
-
-### 2.5.6 - HTTP Interceptor & Token Management
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/data/remote/`
-- [ ] Create `AuthInterceptor.kt` that:
-  - Adds "Authorization: Bearer {token}" to all requests
-  - Handles 401 Unauthorized responses
-  - Attempts token refresh when 401 received
-  - Retries original request with new token
-  - Redirects to login if refresh fails
-- [ ] Create `ErrorHandlingInterceptor.kt` for logging/debugging
-
-### 2.5.7 - ViewModel & State Management (MVVM)
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/viewmodel/`
-- [ ] Create `AuthViewModel.kt` with LiveData<UIState>:
-  - `register(email, displayName, password): Flow<Result<AuthResponse>>`
-  - `login(email, password): Flow<Result<AuthResponse>>`
-  - `logout()`
-  - Error state handling (ValidationError, NetworkError, ServerError)
-- [ ] Create `UserViewModel.kt`:
-  - `getCurrentUser(): Flow<Result<UserResponse>>`
-  - `updatePreferences(request): Flow<Result<Unit>>`
-
-### 2.5.8 - UI Layer (Jetpack Compose)
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/screen/`
-- [ ] Create `LoginScreen.kt` composable:
-  - Email input field with validation
-  - Password input field
-  - Login button with loading state
-  - Error message display
-  - "Register" navigation link
-- [ ] Create `RegisterScreen.kt` composable:
-  - Email, Display Name, Password input fields with validation
-  - Register button with loading state
-  - Back navigation
-  - Error message display
-- [ ] Create `ProfileScreen.kt` composable:
-  - Display current user info (email, displayName, createdAt)
-  - Edit preferences section
-  - Logout button
-- [ ] Create `PreferencesScreen.kt` composable:
-  - Category selection (multi-select)
-  - Tags input (chip-based)
-  - Sliders for: budgetSensitivity, crowdTolerance, sustainabilityPreference
-  - Spinner for mobilityPreference
-  - Number input for maxWalkingMinutes
-  - Save button with validation
-
-### 2.5.9 - Navigation Integration
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/navigation/`
-- [ ] Create `AuthNavGraph.kt` for auth flows
-- [ ] Create `MainNavGraph.kt` for authenticated flows
-- [ ] Implement conditional navigation based on authentication state
-- [ ] Handle deep linking for auth flows (if needed)
-
-### 2.5.10 - Unit & Integration Tests (Mobile)
-**Location**: `mobile/app/src/test/java/com/eskisehir/eventapp/`
-- [ ] AuthViewModelTest - Mock AuthService, test register/login flows
-- [ ] UserViewModelTest - Mock UserService, test profile operations
-- [ ] TokenManagerTest - Test token storage/retrieval
-- [ ] AuthInterceptorTest - Test token refresh logic
-- [ ] Integration tests with MockWebServer for Retrofit testing
-
-### 2.5.11 - Error Handling & User Feedback
-- [ ] Implement proper exception mapping (NetworkException, ValidationException, etc.)
-- [ ] Show Toast/Snackbar for user feedback
-- [ ] Implement retry logic for network failures
-- [ ] Handle edge cases (expired token during app restart, network loss, etc.)
-
-### 2.5.12 - Testing on Backend
-- [ ] Test register → login → getProfile → updatePreferences flow end-to-end
-- [ ] Test token refresh scenario
-- [ ] Test logout (clear local tokens)
-- [ ] Test invalid credentials handling
-- [ ] Test network timeout scenarios
-
----
-
-## PHASE 3 - RECOMMENDATION ENGINE (Contextual Bandit Algorithm)
-**Priority**: 🟠 HIGH (Core feature)
-**Estimated Duration**: 5-7 days
-**Dependencies**: Phase 2.5 Mobile (DONE)
-
-### 3.1 - Backend: Bandit Algorithm Implementation
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/domain/algorithm/`
-- [ ] Create `ContextualBandit.java` class implementing Thompson Sampling
-- [ ] Implement `Arm.java` - represents a POI with its statistics
-- [ ] Implement `BetaDistribution.java` - for Thompson Sampling
-- [ ] Create `RecommendationStrategy.java` interface
-- [ ] Implement `ThompsonSamplingStrategy.java`
-- [ ] Add UCB (Upper Confidence Bound) alternative strategy option
-
-### 3.2 - Backend: Recommendation Service
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/service/`
-- [ ] Create `RecommendationService.java`:
-  - `getRecommendations(userId, count, userLocation): List<POI>`
-  - `recordInteraction(userId, poiId, eventId, feedback): void`
-  - `updateBanditModel(userId): void`
-- [ ] Implement user context extraction:
-  - User preferences (categories, tags, budget, crowd tolerance)
-  - Current location
-  - Time of day
-  - Day of week
-  - Weather (optional integration)
-
-### 3.3 - Backend: Interaction Logging
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/service/`
-- [ ] Create `InteractionService.java`:
-  - `logView(userId, poiId): InteractionLog`
-  - `logBookmark(userId, poiId): void`
-  - `logShare(userId, poiId): void`
-  - `logNegativeFeedback(userId, poiId, reason): void`
-- [ ] Store in UserInteraction entity
-- [ ] Update bandit model statistics after each interaction
-
-### 3.4 - Backend: POI Endpoint Enhancement
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/controller/`
-- [ ] Create `GET /api/recommendations` endpoint:
-  - Query params: `count` (default: 10), `latitude`, `longitude`, `categoryFilter`
-  - Response: List<POIResponse> with ranking scores
-- [ ] Create `POST /api/interactions` endpoint:
-  - Log view/bookmark/share/feedback interactions
-  - Trigger bandit model update
-- [ ] Add `GET /api/recommendations/trending` endpoint for cold-start users
-
-### 3.5 - Backend: Cold Start Strategy
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/service/`
-- [ ] Implement `ColdStartStrategy.java`:
-  - Use POI popularity (view count) for new users
-  - Use trending events for new users
-  - Use user preferences to filter popular POIs
-  - Gradually transition to contextual bandit as interactions accumulate
-
-### 3.6 - Backend: Bandit Model Persistence
-- [ ] Design database schema for bandit statistics:
-  - Table: `bandit_arm_stats` (user_id, poi_id, alpha, beta, plays, wins)
-  - Table: `user_interaction_log` (user_id, poi_id, event_id, interaction_type, timestamp, rating)
-- [ ] Create `BanditStatsRepository`
-- [ ] Implement model serialization/loading
-
-### 3.7 - Backend: Integration Tests for Recommendations
-**Location**: `backend/src/test/java/com/eskisehir/eventapi/service/`
-- [ ] RecommendationServiceTest
-  - Test Thompson Sampling distribution
-  - Test cold-start recommendations
-  - Test context filtering (category, budget, etc.)
-  - Test bandit model update after feedback
-- [ ] InteractionServiceTest
-  - Test interaction logging
-  - Test bandit stats updates
-
-### 3.8 - Mobile: Recommendation UI
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/screen/`
-- [ ] Create `RecommendationsScreen.kt` composable:
-  - Display list of recommended POIs
-  - Show ranking score/confidence level (optional)
-  - Implement infinite scroll/pagination
-  - Handle loading states
-- [ ] Create `RecommendationCard.kt` composable:
-  - POI image, name, category, distance
-  - "View Details" button
-  - "Save" bookmark button
-  - Rating display
-
-### 3.9 - Mobile: Interaction Tracking
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/data/remote/`
-- [ ] Create `InteractionService.kt` for:
-  - `logView(poiId, eventId)`
-  - `logBookmark(poiId)`
-  - `logShare(poiId)`
-  - `logFeedback(poiId, rating, comment)`
-- [ ] Implement automatic interaction logging on:
-  - POI card view (use SnapshotStateList to track)
-  - Detail screen open
-  - Bookmark action
-  - Share action
-
-### 3.10 - Mobile: Feedback UI
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/screen/`
-- [ ] Create feedback dialog/bottom sheet:
-  - Star rating (1-5)
-  - Optional comment field
-  - "Helpful" / "Not Helpful" quick buttons
-  - Submit button
-
-### 3.11 - Testing Recommendation Flow
-- [ ] E2E test: User interacts with 5+ POIs → recommendations improve
-- [ ] Test: Preferences change → recommendations update
-- [ ] Test: Cold start (new user) → gets popularity-based recommendations
-- [ ] Test: Warm start (established user) → gets personalized recommendations
-
----
-
-## PHASE 4 - ROUTE PLANNING & OPTIMIZATION
-**Priority**: 🟡 MEDIUM (Complex feature)
-**Estimated Duration**: 5-6 days
-**Dependencies**: Phase 3 Recommendations (DONE)
-
-### 4.1 - Backend: Route Planning Service
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/domain/algorithm/`
-- [ ] Implement `RoutePlanner.java` using Nearest Neighbor + 2-opt optimization
-- [ ] Implement `TSPSolver.java` (Traveling Salesman Problem) for optimal route
-- [ ] Consider constraints:
-  - Walking time between POIs
-  - Maximum total walking time (from user preference)
-  - Operating hours of POIs
-  - Category preferences
-  - Budget constraints
-
-### 4.2 - Backend: Route Generation Endpoint
-**Location**: `backend/src/main/java/com/eskisehir/eventapi/controller/`
-- [ ] Create `POST /api/routes/generate` endpoint:
-  - Input: startLocation, duration, categories, maxWalkingTime, budget
-  - Output: Optimized route with POIs, directions, estimated times
-- [ ] Create `GET /api/routes/{routeId}` endpoint:
-  - Get saved route details
-
-### 4.3 - Backend: Distance & Navigation Integration
-- [ ] Integrate with OpenStreetMap/Overpass for:
-  - Distance calculations between POIs
-  - Walking routes/pathfinding
-  - Estimated walking time
-- [ ] Create `GeoService.java` for distance calculations
-
-### 4.4 - Mobile: Route Generation UI
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/screen/`
-- [ ] Create `RouteGeneratorScreen.kt`:
-  - Start location picker
-  - Duration slider (1-6 hours)
-  - Category multi-select filter
-  - Budget range slider
-  - Generate button with loading state
-
-### 4.5 - Mobile: Route Display & Navigation
-**Location**: `mobile/app/src/main/java/com/eskisehir/eventapp/ui/screen/`
-- [ ] Create `RouteDetailScreen.kt`:
-  - Map showing POIs and route path
-  - POI list with order numbers
-  - Step-by-step directions
-  - Total walking time/distance
-  - Save route button
-- [ ] Integrate with Maps API (Google Maps or OSM)
-
-### 4.6 - Mobile: Turn-by-Turn Navigation (Advanced)
-- [ ] Create `NavigationScreen.kt` for active navigation:
-  - Real-time location tracking
-  - Next waypoint highlighting
-  - Arrival detection
-  - Re-route on deviation
-
----
-
-## PHASE 5 - ADVANCED FEATURES & POLISH
-**Priority**: 🟢 LOW (Nice-to-have)
-**Estimated Duration**: 4-5 days
-**Dependencies**: Phase 4 (DONE)
-
-### 5.1 - Weather Integration
-- [ ] Integrate OpenWeatherMap API
-- [ ] Show weather conditions on recommendation cards
-- [ ] Adjust recommendations based on weather (indoor events on rain)
-
-### 5.2 - Social Features
-- [ ] User-to-user route sharing
-- [ ] Route ratings/comments
-- [ ] Popular routes based on community
-- [ ] Follower/following system (optional)
-
-### 5.3 - Advanced Filtering
-- [ ] Filter by price range, distance, rating
-- [ ] Saved searches
-- [ ] Advanced category/tag combinations
-
-### 5.4 - Offline Support
-- [ ] Cache POI data locally
-- [ ] Offline map tiles (OSM)
-- [ ] Offline route availability
-
-### 5.5 - Analytics & Performance
-- [ ] Backend: Add request logging and metrics
-- [ ] Mobile: Crash reporting (Firebase)
-- [ ] Performance monitoring
-
----
-
-## 🛠️ TECHNICAL DEPENDENCIES & SETUP
-
-### Backend (Already Done ✅)
-- Spring Boot 3.4.4
+#### Backend
 - Java 21
-- Spring Security + JWT
+- Spring Boot
+- Spring Web
 - Spring Data JPA
-- H2 (dev) / PostgreSQL (prod)
-- Maven
+- Spring Security
+- PostgreSQL hedef veritabanı
+- Redis cache opsiyonel ama önerilir
 
-### Mobile (To Setup)
-```gradle
-// Retrofit + OkHttp
-implementation("com.squareup.retrofit2:retrofit:2.11.0")
-implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
-implementation("com.squareup.okhttp3:okhttp:4.12.0")
+#### AI / Optimization
+- Java tabanlı servis katmanı ile entegrasyon
+- Gerekirse Python tabanlı ayrı deneysel servis ileride değerlendirilebilir, ancak ana ürün hattı Spring odaklı kalacak
+- OR-Tools Java binding veya Java uyumlu optimizasyon yaklaşımı
 
-// Moshi/Gson for JSON
-implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+### Kritik Mimari İlke
+Recommendation generation ve route optimization kesin olarak ayrılacak.
 
-// Jetpack
-implementation("androidx.datastore:datastore-preferences:1.1.1")
-implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-implementation("androidx.navigation:navigation-compose:2.7.7")
-
-// Coroutines
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-
-// Maps
-implementation("com.google.android.gms:play-services-maps:18.2.0")
-
-// Hilt DI
-implementation("com.google.dagger:hilt-android:2.51.1")
-kapt("com.google.dagger:hilt-compiler:2.51.1")
-```
+Doğru akış:
+1. Kullanıcı profilini oluştur
+2. Aday POI havuzunu üret ve skorla
+3. Aday havuzunu daralt
+4. Bu havuz üzerinden rota optimize et
+5. Etkileşim ve geri bildirim topla
+6. Öğrenme modelini güncelle
 
 ---
 
-## 📅 TIMELINE ESTIMATE
+## 2. Mevcut Durum Özeti
 
-| Phase | Duration | Start | End |
-|-------|----------|-------|-----|
-| 2.5 Mobile Auth | 3-4 days | Day 23 | Day 26 |
-| 3 Recommendations | 5-7 days | Day 27 | Day 33 |
-| 4 Route Planning | 5-6 days | Day 34 | Day 40 |
-| 5 Polish & Features | 4-5 days | Day 41 | Day 45 |
-| **Total** | **17-22 days** | **Day 23** | **Day 45** |
+### Tamamlanan Fazlar
+- Phase 1: Data model temeli
+- Phase 2: Authentication ve kullanıcı sistemi
+- Phase 2.5: Mobile integration temelleri
+- Phase 3: Recommendation altyapısının ilk sürümü
+- Phase 4: Route planning ve navigation temelleri
+- Phase 5: Weather, social, filtering, offline altyapısı, analytics başlangıcı
 
----
-
-## ✅ DAILY WORKFLOW TEMPLATE (for next session)
-
-```
-MORNING (Start of Day):
-1. Read previous session notes: /memories/session/
-2. Check last test run results
-3. Review TODO list for current phase
-4. Set 1-3 concrete goals for the day
-
-DURING WORK:
-1. Mark tasks as in-progress before starting
-2. Run tests after each feature completion
-3. Commit changes regularly
-4. Update session memory with progress
-
-END OF DAY:
-1. Mark completed tasks as done
-2. Write session summary:
-   - What was accomplished
-   - What's blocking further progress
-   - What to start with tomorrow
-3. Push all changes to git
-4. Save memory notes for continuation
-```
+### Bundan Sonraki Hedef
+Phase 5 sonrası çalışmalar, yalnızca yeni özellik eklemek için değil, sistemi tez savunmasına uygun hale getirmek için yeniden yapılandırılacak: mimari belgeler, veri modeli, deney planı, algoritmik gerekçeler ve ölçüm mekanizmaları tamamlanacak.
 
 ---
 
-## 🔑 KEY DECISIONS TO MAKE
+## 3. Phase 6 - High-Level System Design ve Tez Mimari Paketleri
 
-1. **Recommendation Algorithm**: Thompson Sampling vs UCB vs other?
-2. **Route Optimization**: Greedy NN+2opt vs exact TSP solver vs heuristic?
-3. **Map Provider**: Google Maps vs OSM vs Mapbox?
-4. **Offline Support**: Include in Phase 4 or Phase 5?
-5. **Authentication Cache**: How long to keep tokens locally?
+**Priority**: Critical
+**Goal**: Sistemin geri kalan tüm geliştirmelerine yön verecek yüksek seviyeli mimari ve tez savunma çerçevesini netleştirmek
+
+### 6.1 Problem Restatement
+- [x] Problemi açık ve akademik dille yeniden yaz
+- [x] Kullanıcı girdilerini tanımla: ilgi alanı, bütçe, süre, ulaşım, crowd tolerance, sustainability preference
+- [x] Sistem çıktılarını tanımla: öneri listesi, optimize rota, açıklanabilir skor bileşenleri
+- [x] Sistem sınırlarını yaz: gerçek zamanlı tam crowd sensörü yok, ilk şehir Eskişehir, MVP kısıtları mevcut
+
+### 6.2 Functional Requirements
+- [x] User profile and preference management
+- [x] POI discovery and search
+- [x] Personalized recommendation generation
+- [x] Dynamic route creation
+- [x] Route feedback collection
+- [x] Interaction logging and learning updates
+- [x] Turkish UI support end-to-end
+
+### 6.3 Non-Functional Requirements
+- [x] Maintainability
+- [x] Modularity
+- [x] Explainability
+- [x] Scalability for future cities
+- [x] Performance targets for recommendation and route generation
+- [x] Fault tolerance for external API dependencies
+
+### 6.4 Assumptions and Constraints
+- [x] İlk canlı veri şehri Eskişehir
+- [x] Crowd değeri gerçek zamanlı değil, proxy model olacak
+- [x] Turkish NLP ilk sürümde baseline yaklaşım kullanabilir
+- [x] Optimization gerçek zamanlı aşırı büyük problem çözmeyecek, aday havuzu sınırlı olacak
+
+### 6.5 Engineering Risks and Mitigations
+- [x] Veri eksikliği riskleri
+- [x] Optimization latency riski
+- [x] Cold-start kalite riski
+- [x] Türkçe yorum analizi doğruluk riski
+- [x] Harita / hava durumu gibi dış servis bağımlılığı riski
+
+### 6.6 C4 Model Deliverables
+- [x] Context Diagram açıklaması
+- [x] Container Diagram açıklaması
+- [x] Component Diagram açıklaması
+- [x] Gerekli yerlerde code-level design notları
+- [x] Structurizr DSL çıktıları hazırlanacak
+
+### 6.7 Target Module Boundaries
+- [x] Auth module
+- [x] User profile module
+- [x] POI module
+- [x] Recommendation module
+- [x] Bandit learning module
+- [x] Route optimization module
+- [x] Feedback / NLP module
+- [x] Analytics and evaluation module
+
+**Expected Deliverables**
+- High-level architecture document
+- C4 descriptions
+- Structurizr DSL drafts
+- Service/module boundary document
 
 ---
 
-## 📞 QUICK REFERENCE
+## 4. Phase 7 - Data Modeling ve PostgreSQL Geçiş Tasarımı
 
-- **Backend Tests**: `cd backend && ./mvnw test`
-- **Mobile Build**: `cd mobile && ./gradlew build`
-- **Docs**: See `PHASE2_5_MOBILE_INTEGRATION.md` for API contracts
-- **Architecture**: MVVM + Clean Architecture pattern
-- **State**: Use ViewModel + LiveData/StateFlow
-- **Threading**: Coroutines for all async operations
+**Priority**: Critical
+**Goal**: Tez savunmasına uygun, ölçeklenebilir ve coğrafi sorgulara hazır veri modeli oluşturmak
+
+### 7.1 Database Schema Targets
+- [ ] `users`
+- [ ] `user_preferences`
+- [ ] `poi_categories`
+- [ ] `pois`
+- [ ] `poi_tags`
+- [ ] `poi_tag_map`
+- [ ] `poi_metrics`
+- [ ] `routes`
+- [ ] `route_items`
+- [ ] `user_interactions`
+- [ ] `recommendation_logs`
+- [ ] `user_feedback`
+- [ ] `bandit_events`
+
+### 7.2 JPA / Relational Design Work
+- [ ] Mevcut entity'leri yeni şemaya göre hizala
+- [ ] Çok şehirli genişleme için city dimension ekle
+- [ ] POI metrics tablosunu ayrı tutma kararını gerekçelendir
+- [ ] Recommendation log ile interaction log ayrımını netleştir
+
+### 7.3 PostgreSQL and Geospatial Readiness
+- [ ] PostgreSQL hedef şema planını yaz
+- [ ] Konum kolonları için uygun tip seçimini belirle
+- [ ] PostGIS geçiş notlarını hazırla
+- [ ] İndeks planını oluştur
+
+### 7.4 Migration Plan
+- [ ] H2 / mevcut geliştirme yapısından PostgreSQL'e geçiş stratejisini yaz
+- [ ] Flyway veya Liquibase seçimini netleştir
+- [ ] Seed data yükleme stratejisini yaz
+
+**Expected Deliverables**
+- Schema document
+- SQL migration plan
+- Entity-to-table mapping notes
+- Indexing strategy
 
 ---
 
-**Bu prompt'u kullanarakı yarın aşağıdaki işlemleri yapabilirsiniz:**
+## 5. Phase 8 - Spring Boot Backend Refactor ve Thesis-Ready Service Structure
 
-1. Yukarıdaki fazlardan birini seçin (önerilen sıra: 2.5 → 3 → 4 → 5)
-2. `İşlemlerine başla` diyerek başlayın
-3. Sistem otomatik olarak proje analizi yapacak ve spesifik görevleri başlatacak
+**Priority**: Critical
+**Goal**: Backend'i tez seviyesinde modüler, temiz ve genişletilebilir hale getirmek
+
+### 8.1 Package Structure Refinement
+- [ ] `config`
+- [ ] `controller`
+- [ ] `domain.model`
+- [ ] `dto`
+- [ ] `repository`
+- [ ] `service`
+- [ ] `algorithm`
+- [ ] `optimizer`
+- [ ] `nlp`
+- [ ] `integration`
+- [ ] `metrics`
+- [ ] `exception`
+
+### 8.2 REST API Hardening
+- [ ] `POST /auth/register`
+- [ ] `POST /auth/login`
+- [ ] `GET /users/me`
+- [ ] `PUT /users/preferences`
+- [ ] `GET /pois/search`
+- [ ] `GET /recommendations`
+- [ ] `POST /routes/generate`
+- [ ] `GET /routes/{id}`
+- [ ] `POST /interactions`
+- [ ] `POST /feedback`
+
+### 8.3 Validation and Error Handling
+- [ ] DTO validation standardize edilecek
+- [ ] Global exception handler güçlendirilecek
+- [ ] Error response contract sabitlenecek
+- [ ] Rate limiting ve cache noktaları tanımlanacak
+
+### 8.4 Caching and Async Work
+- [ ] Hava durumu cache stratejisi
+- [ ] POI cache stratejisi
+- [ ] Recommendation cache kuralları
+- [ ] Background jobs gerektiren işler: batch scoring, analytics aggregation, feedback processing
+
+**Expected Deliverables**
+- Refined backend module plan
+- Endpoint contract document
+- Error handling strategy
+- Caching and background job notes
 
 ---
 
-*Son güncelleme: 22 Nisan 2026*
-*Hazırlayan: Claude (Faz 2 Implementation Complete)*
+## 6. Phase 9 - AI / ML Design Deepening
+
+**Priority**: High
+**Goal**: Recommendation katmanını tez seviyesinde savunulabilir hale getirmek
+
+### 9.1 Content-Based Filtering
+- [ ] User feature representation oluştur
+- [ ] POI feature representation oluştur
+- [ ] Initial recommendation score formülünü tanımla
+- [ ] Cold-start için popularity + preference blend yaklaşımı yaz
+
+### 9.2 Candidate Generation and Ranking Pipeline
+- [ ] Candidate generation adımını ayrı servis olarak tanımla
+- [ ] Candidate ranking adımını ayrı servis olarak tanımla
+- [ ] Ranking score bileşenlerini ayrıştır: preference fit, crowd fit, budget fit, sustainability fit, local support fit
+
+### 9.3 Contextual Bandit Design
+- [ ] İlk pratik algoritmayı seç: contextual Thompson Sampling veya LinUCB
+- [ ] Neden seçildiğini akademik ve mühendislik açısından yaz
+- [ ] Context vector yapısını belirle:
+  - weather
+  - time of day
+  - day of week
+  - transportation mode
+  - budget level
+  - crowd preference
+  - route length preference
+  - POI category
+
+### 9.4 Reward Function
+- [ ] Reward mapping'i finalize et:
+  - `view = 0.1`
+  - `click = 0.2`
+  - `save = 0.4`
+  - `add_to_route = 0.6`
+  - `visited = 0.8`
+  - `positive_feedback = 1.0`
+  - `dislike = -0.4`
+- [ ] Reward event persistence yapısını netleştir
+
+### 9.5 Learning Loop Integration
+- [ ] Recommendation log ile bandit event bağlantısını kur
+- [ ] Batch vs online update kararını yaz
+- [ ] Exploration vs exploitation mekanizmasını parametrize et
+
+**Expected Deliverables**
+- AI methodology document
+- Feature engineering table
+- Reward model notes
+- Recommendation pipeline pseudocode
+
+---
+
+## 7. Phase 10 - Multi-Criteria Route Optimization Redesign
+
+**Priority**: High
+**Goal**: Route planning modülünü formal ve tezde savunulabilir çok kriterli optimizasyon sistemine dönüştürmek
+
+### 10.1 Problem Formulation
+- [ ] Problemi Orienteering Problem / multi-objective route planning bağlamında açıkla
+- [ ] Objective function tanımla
+- [ ] Hard constraints ve soft objectives ayrımını yaz
+
+### 10.2 Optimization Factors
+- [ ] distance
+- [ ] duration
+- [ ] budget
+- [ ] crowd exposure
+- [ ] sustainability / carbon impact
+- [ ] preference match
+- [ ] local business support
+
+### 10.3 Normalization Strategy
+- [ ] Tüm faktörler için normalization yöntemi yaz
+- [ ] Farklı ölçekteki sinyallerin tek skor altında birleşme stratejisini açıkla
+
+### 10.4 Initial Weights and Adaptation
+- [ ] Başlangıç ağırlıklarını öner
+- [ ] Kullanıcı tercihlerine göre weight shifting stratejisi tasarla
+- [ ] Must-see locations ve avoid-overcrowded tercihlerinin constraint dönüşümünü açıkla
+
+### 10.5 Solver Design
+- [ ] OR-Tools Java kullanımı değerlendir
+- [ ] Alternatif heuristic fallback tasarla
+- [ ] Infeasible route senaryoları için fallback planı oluştur
+
+### 10.6 Output Explainability
+- [ ] Üretilen rotanın neden seçildiğini açıklayan summary alanları tasarla
+- [ ] Route detail ekranı için açıklanabilir skor bileşenleri planla
+
+**Expected Deliverables**
+- Formal optimization document
+- Objective function definition
+- Solver design notes
+- Route optimization pseudocode
+
+---
+
+## 8. Phase 11 - Turkish NLP Feedback Loop
+
+**Priority**: Medium
+**Goal**: Kullanıcı metinsel geri bildirimini recommendation quality update akışına bağlamak
+
+### 11.1 Feedback Ingestion
+- [ ] Route sonrası feedback akışını standartlaştır
+- [ ] Star rating + serbest metin yapısını sabitle
+- [ ] Feedback lifecycle'ı tanımla
+
+### 11.2 MVP Turkish Sentiment Approach
+- [ ] Basit Türkçe sentiment baseline tasarla
+- [ ] Sözlük tabanlı veya hafif sınıflandırıcı yaklaşımı seç
+- [ ] Text cleaning ve normalization stratejisini belirle
+
+### 11.3 Learning Integration
+- [ ] Sentiment skorunu reward modeline bağla
+- [ ] Negative feedback nedenlerini kategorize et
+- [ ] Recommendation quality tuning için feedback aggregation tasarla
+
+### 11.4 Future Extensions
+- [ ] Advanced Turkish NLP future plan
+- [ ] Aspect-based feedback analysis future plan
+- [ ] Embedding-based similarity future plan
+
+**Expected Deliverables**
+- Feedback pipeline document
+- Sentiment baseline design
+- Reward update integration notes
+
+---
+
+## 9. Phase 12 - Mobile App Re-Architecture for Thesis Quality
+
+**Priority**: Critical
+**Goal**: Kotlin / Jetpack Compose istemcisini tez seviyesinde modüler ve Türkçe UX odaklı hale getirmek
+
+### 12.1 Mobile Package Structure
+- [ ] `data`
+- [ ] `domain`
+- [ ] `ui`
+- [ ] `navigation`
+- [ ] `di`
+- [ ] `components`
+- [ ] `viewmodel`
+- [ ] `local`
+- [ ] `remote`
+
+### 12.2 Core Screens
+- [ ] Splash
+- [ ] Onboarding
+- [ ] Login / Register
+- [ ] Preference Setup
+- [ ] Home
+- [ ] Place Discovery
+- [ ] Recommendation Results
+- [ ] Route Details
+- [ ] Map Screen
+- [ ] Saved Routes
+- [ ] Feedback Screen
+- [ ] Profile
+
+### 12.3 Turkish UI Requirements
+- [ ] Tüm label, CTA ve boş durum metinleri Türkçe olacak
+- [ ] Recommendation açıklama metinleri Türkçe olacak
+- [ ] Feedback akışı Türkçe hazırlanacak
+- [ ] Onboarding tez hedefini destekleyecek biçimde net olacak
+
+### 12.4 UX and State Management
+- [ ] State management standardı netleştirilecek
+- [ ] Screen state, effect ve event ayrımı kurulacak
+- [ ] API entegrasyonu ve error state gösterimi standardize edilecek
+- [ ] Offline ve cache davranışı kullanıcıya anlaşılır biçimde gösterilecek
+
+**Expected Deliverables**
+- Mobile architecture document
+- Screen inventory
+- Turkish text inventory
+- State management guideline
+
+---
+
+## 10. Phase 13 - Eskişehir-Specific MVP Dataset Expansion
+
+**Priority**: High
+**Goal**: Prototip, test ve tez deneyi için yeterli kalitede Eskişehir veri seti oluşturmak
+
+### 13.1 Coverage Areas
+- [ ] Odunpazarı
+- [ ] Sazova
+- [ ] museums
+- [ ] local cafes
+- [ ] parks
+- [ ] cultural locations
+- [ ] historical sites
+- [ ] riverside spots
+
+### 13.2 POI Attributes
+- [ ] name
+- [ ] category
+- [ ] district
+- [ ] latitude
+- [ ] longitude
+- [ ] estimated visit duration
+- [ ] average price level
+- [ ] tags
+- [ ] indoor/outdoor
+- [ ] family-friendly
+- [ ] sustainability/local score
+- [ ] crowd proxy
+- [ ] popularity
+- [ ] opening hours
+
+### 13.3 Dataset Engineering
+- [ ] Seed data format seç
+- [ ] POI scoring proxies tanımla
+- [ ] Local business score üretim mantığını yaz
+- [ ] Crowd proxy üretim mantığını yaz
+
+**Expected Deliverables**
+- Eskişehir seed dataset
+- Data dictionary
+- Proxy score generation rules
+
+---
+
+## 11. Phase 14 - Testing, Evaluation and Thesis Experiment Design
+
+**Priority**: Critical
+**Goal**: Sistemi yazılım, AI ve kullanıcı memnuniyeti açısından ölçülebilir hale getirmek
+
+### 14.1 Technical Testing
+- [ ] Unit tests
+- [ ] Integration tests
+- [ ] API tests
+- [ ] route generation tests
+- [ ] mobile UI tests
+
+### 14.2 AI Evaluation Metrics
+- [ ] Precision@K
+- [ ] Recall@K
+- [ ] NDCG@K
+- [ ] CTR
+- [ ] route acceptance rate
+
+### 14.3 Route Quality Metrics
+- [ ] total distance
+- [ ] total duration
+- [ ] budget compliance
+- [ ] crowd exposure
+- [ ] carbon impact
+
+### 14.4 User Satisfaction and Thesis Evaluation
+- [ ] Kullanıcı memnuniyeti anket tasarımı
+- [ ] Baseline sistem ile karşılaştırma planı
+- [ ] Deney düzeneği ve hipotezlerin yazılması
+
+**Expected Deliverables**
+- Test plan
+- Evaluation metric guide
+- Thesis experiment outline
+
+---
+
+## 12. Phase 15 - Implementation Roadmap and Delivery Milestones
+
+**Priority**: Critical
+**Goal**: Kalan tüm çalışmaları uygulanabilir milestone'lara ayırmak
+
+### 15.1 Milestone Order
+- [ ] Milestone 1: High-level architecture + C4 + Structurizr
+- [ ] Milestone 2: PostgreSQL schema + migration strategy
+- [ ] Milestone 3: Backend modular refactor
+- [ ] Milestone 4: Content-based recommender hardening
+- [ ] Milestone 5: Route optimizer redesign
+- [ ] Milestone 6: Contextual bandit integration
+- [ ] Milestone 7: Turkish feedback analysis
+- [ ] Milestone 8: Mobile architecture cleanup + Turkish UX alignment
+- [ ] Milestone 9: Eskişehir dataset expansion
+- [ ] Milestone 10: Testing + thesis evaluation
+
+### 15.2 Required Artifact Per Milestone
+- [ ] Code changes
+- [ ] Documentation updates
+- [ ] Test outputs
+- [ ] Academic justification notes
+
+---
+
+## 13. Bir Sonraki Somut Adım
+
+Phase 6 mimari paketi tamamlandı. Sıradaki doğrudan uygulama fazı, Phase 7 veri modelleme ve PostgreSQL geçiş tasarımıdır.
+
+### Immediate Focus
+- [ ] PostgreSQL hedef şemasını yaz
+- [ ] JPA entity-to-table hizalamasını çıkar
+- [ ] recommendation_logs ve user_interactions ayrımını netleştir
+- [ ] PostGIS readiness ve index planını dokümante et
+- [ ] Migration strategy belgesini hazırla
+
+---
+
+## 14. Working Principles
+
+- Kotlin ve Spring ekseni korunacak.
+- AI ve optimization kararları akademik gerekçeleriyle yazılacak.
+- MVP-first yaklaşım sürdürülecek.
+- UI dili Türkçe olacak.
+- Kod kadar dokümantasyon da teslim çıktısı kabul edilecek.
+- Her ana karar için trade-off notu tutulacak.
+
+---
+
+## 15. Beklenen Ana Artefaktlar
+
+- Markdown architecture docs
+- Structurizr DSL files
+- PostgreSQL migration scripts
+- Spring Boot backend refactor planı ve modül belgeleri
+- Recommendation and optimization design docs
+- Turkish UI text catalog
+- Eskişehir seed dataset
+- Test and thesis evaluation plan
+
+Bu roadmap bundan sonra yalnızca yapılacaklar listesi değil, aynı zamanda tez savunma çerçevesi, mimari referans ve teknik karar kılavuzu olarak kullanılacaktır.
