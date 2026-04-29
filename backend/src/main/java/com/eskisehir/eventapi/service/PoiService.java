@@ -4,6 +4,8 @@ import com.eskisehir.eventapi.domain.model.Category;
 import com.eskisehir.eventapi.domain.model.Poi;
 import com.eskisehir.eventapi.exception.PoiNotFoundException;
 import com.eskisehir.eventapi.repository.PoiRepository;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class PoiService {
      *
      * @throws PoiNotFoundException if no POI exists with the given ID
      */
+    @Cacheable(value = "poi", key = "#id")
     public Poi getPoiById(Long id) {
         return poiRepository.findById(id)
                 .orElseThrow(() -> new PoiNotFoundException(id));

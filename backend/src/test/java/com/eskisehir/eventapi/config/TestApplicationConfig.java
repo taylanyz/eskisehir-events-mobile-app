@@ -16,9 +16,9 @@ public class TestApplicationConfig {
 
     @Bean
     @Primary
-    public WeatherService weatherService(WeatherDataRepository weatherDataRepository) {
+    public WeatherService weatherService(WeatherDataRepository weatherDataRepository, RestTemplate restTemplate) {
         // Return WeatherService with API disabled (uses mock weather generation)
-        return new WeatherService(weatherDataRepository, null, "test-key", false);
+        return new WeatherService(weatherDataRepository, restTemplate);
     }
 
     @Bean

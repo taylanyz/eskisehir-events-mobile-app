@@ -4,6 +4,7 @@ import com.eskisehir.eventapi.data.model.WeatherData;
 import com.eskisehir.eventapi.repository.WeatherDataRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,22 +22,25 @@ public class WeatherService {
     private static final Logger logger = LoggerFactory.getLogger(WeatherService.class);
     private static final long CACHE_DURATION_MINUTES = 30;
 
-    private final WeatherDataRepository weatherDataRepository;
-    private final RestTemplate restTemplate;
-    private final String weatherApiKey;
-    private final Boolean weatherApiEnabled;
+    private WeatherDataRepository weatherDataRepository;
+    private RestTemplate restTemplate;
 
-    public WeatherService(WeatherDataRepository weatherDataRepository, RestTemplate restTemplate) {
-        this(weatherDataRepository, restTemplate, "test-key", false);
+    @Value("${weather.api.key:test-key}")
+    private String weatherApiKey;
+
+    @Value("${weather.api.enabled:false}")
+    private Boolean weatherApiEnabled;
+
+    // Default constructor required by Spring for field injection
+    public WeatherService() {
     }
 
-    // Constructor for testing with explicit config values
-    public WeatherService(WeatherDataRepository weatherDataRepository, RestTemplate restTemplate,
-                         String weatherApiKey, Boolean weatherApiEnabled) {
+    @Autowired
+    public WeatherService(WeatherDataRepository weatherDataRepository, RestTemplate restTemplate) {
         this.weatherDataRepository = weatherDataRepository;
         this.restTemplate = restTemplate;
-        this.weatherApiKey = weatherApiKey != null ? weatherApiKey : "test-key";
-        this.weatherApiEnabled = weatherApiEnabled != null ? weatherApiEnabled : false;
+        this.weatherApiKey = "test-key";
+        this.weatherApiEnabled = false;
     }
 
     /**

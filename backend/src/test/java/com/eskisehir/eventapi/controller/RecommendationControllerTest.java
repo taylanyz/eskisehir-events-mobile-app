@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Proxy;
 import java.util.Collections;
@@ -46,7 +47,7 @@ class RecommendationControllerTest {
                 new Class[]{WeatherDataRepository.class},
                 (proxy, method, args) -> null
         );
-        weatherService = new WeatherService(stubRepository, null, "test-key", false);
+        weatherService = new WeatherService(stubRepository, new RestTemplate());
         
         mockMvc = MockMvcBuilders.standaloneSetup(
                 new RecommendationController(recommendationEngine, weatherService)
