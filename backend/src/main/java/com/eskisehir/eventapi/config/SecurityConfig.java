@@ -86,8 +86,10 @@ public class SecurityConfig {
                         authorizeRequests
                                 // Public endpoints
                                 .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/v1/health", "/api/v1/stats").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 
                                 // User endpoints (require authentication)
                                 .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
