@@ -146,4 +146,26 @@ public class BanditLearningService {
     public BanditArmStat getArmStatistics(Long userId, Long poiId) {
         return banditStatsRepository.findByUserIdAndPoiId(userId, poiId).orElse(null);
     }
+
+    /**
+     * Record feedback-derived reward signal for Thompson Sampling update (Phase 11).
+     * Called after user submits feedback on a completed route.
+     * MVP: Placeholder for feedback integration (full implementation in Phase 12).
+     */
+    public void recordFeedbackReward(com.eskisehir.eventapi.service.feedback.FeedbackReward feedbackReward) {
+        try {
+            // Phase 11 MVP: Log feedback reward
+            // Full integration: Update Thompson Sampling stats for POIs in route based on feedback score
+            log.info("Feedback reward recorded for bandit learning (Phase 11 MVP placeholder)");
+            
+            // Future implementation:
+            // 1. Retrieve route and its POIs
+            // 2. Apply feedback.getRewardScore() to each POI
+            // 3. Update Thompson Sampling alpha/beta distributions
+            // 4. Log themes for quality monitoring
+            
+        } catch (Exception e) {
+            log.error("Error recording feedback reward for bandit learning", e);
+        }
+    }
 }
