@@ -1,6 +1,8 @@
 package com.eskisehir.eventapi.service;
 
 import com.eskisehir.eventapi.algorithm.ColdStartStrategy;
+import com.eskisehir.eventapi.algorithm.RecommendationCandidateGenerator;
+import com.eskisehir.eventapi.algorithm.RecommendationRanker;
 import com.eskisehir.eventapi.algorithm.RecommendationStrategy;
 import com.eskisehir.eventapi.domain.model.BanditEvent;
 import com.eskisehir.eventapi.domain.model.Category;
@@ -22,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 class RecommendationEngineTest {
 
     private StubRecommendationService recommendationService;
+    private StubRecommendationCandidateGenerator candidateGenerator;
+    private StubRecommendationRanker recommendationRanker;
     private StubRecommendationStrategy recommendationStrategy;
     private StubColdStartStrategy coldStartStrategy;
     private StubBanditEventRepository banditEventRepository;
@@ -30,14 +34,18 @@ class RecommendationEngineTest {
     @BeforeEach
     void setUp() {
         recommendationService = new StubRecommendationService();
+        candidateGenerator = new StubRecommendationCandidateGenerator();
+        recommendationRanker = new StubRecommendationRanker();
         recommendationStrategy = new StubRecommendationStrategy();
         coldStartStrategy = new StubColdStartStrategy();
         banditEventRepository = new StubBanditEventRepository();
         recommendationEngine = new RecommendationEngine(
                 recommendationService,
+                candidateGenerator,
+                recommendationRanker,
                 recommendationStrategy,
                 coldStartStrategy,
-            banditEventRepository.asRepository());
+                banditEventRepository.asRepository());
     }
 
     @Test
@@ -63,15 +71,15 @@ class RecommendationEngineTest {
         request.setLimit(1);
         request.setUserId(12L);
 
-        recommendationService.activePois = List.of(poiA, poiB);
-        recommendationStrategy.scored = linkedScores(poiA, 0.8, poiB, 0.2);
+        candidateGenerator.candidates = List.of(poiA, poiB);
+        recommendationRanker.scored = linkedScores(poiA, 0.8, poiB, 0.2);
         banditEventRepository.userEvents = List.of(new BanditEvent(), new BanditEvent(), new BanditEvent());
 
         List<Poi> result = recommendationEngine.getRecommendations(request);
 
         assertEquals(1, result.size());
         assertEquals(1L, result.get(0).getId());
-        assertEquals(1, recommendationStrategy.invocationCount);
+        assertEquals(1, recommendationRanker.invocationCount);
         assertEquals(0, coldStartStrategy.invocationCount);
     }
 
@@ -86,8 +94,8 @@ class RecommendationEngineTest {
         request.setLimit(1);
         request.setUserId(12L);
 
-        recommendationService.activePois = List.of(poiA, poiB);
-        recommendationStrategy.scored = linkedScores(poiA, 0.85, poiB, 0.33);
+        candidateGenerator.candidates = List.of(poiA, poiB);
+        recommendationRanker.scored = linkedScores(poiA, 0.85, poiB, 0.33);
         banditEventRepository.userEvents = List.of(new BanditEvent(), new BanditEvent(), new BanditEvent());
 
         Map<Poi, Double> result = recommendationEngine.getRecommendationScores(request);
@@ -106,7 +114,7 @@ class RecommendationEngineTest {
         RecommendationRequest request = new RecommendationRequest();
         request.setLimit(1);
 
-        recommendationService.activePois = List.of(poiA);
+        candidateGenerator.candidates = List.of(poiA);
         coldStartStrategy.scored = linkedScores(poiA, 0.7);
 
         List<Poi> result = recommendationEngine.getRecommendations(request);
@@ -126,7 +134,7 @@ class RecommendationEngineTest {
         request.setLimit(1);
         request.setUserId(99L);
 
-        recommendationService.activePois = List.of(poiA);
+        candidateGenerator.candidates = List.of(poiA);
         coldStartStrategy.scored = linkedScores(poiA, 0.6);
         banditEventRepository.userEvents = List.of(new BanditEvent(), new BanditEvent());
 
@@ -176,6 +184,26 @@ class RecommendationEngineTest {
         @Override
         public List<Poi> getAllActivePois() {
             return activePois;
+        }
+    }
+
+    private static final class StubRecommendationCandidateGenerator implements RecommendationCandidateGenerator {
+        private List<Poi> candidates = Collections.emptyList();
+
+        @Override
+        public List<Poi> generateCandidates(RecommendationRequest request) {
+            return candidates;
+        }
+    }
+
+    private static final class StubRecommendationRanker implements RecommendationRanker {
+        private Map<Poi, Double> scored = Collections.emptyMap();
+        private int invocationCount;
+
+        @Override
+        public Map<Poi, Double> rankCandidates(RecommendationRequest request, List<Poi> candidates) {
+            invocationCount++;
+            return scored;
         }
     }
 

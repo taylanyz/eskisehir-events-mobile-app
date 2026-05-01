@@ -1,6 +1,8 @@
 package com.eskisehir.eventapi.service;
 
 import com.eskisehir.eventapi.algorithm.ColdStartStrategy;
+import com.eskisehir.eventapi.algorithm.RecommendationCandidateGenerator;
+import com.eskisehir.eventapi.algorithm.RecommendationRanker;
 import com.eskisehir.eventapi.algorithm.RecommendationStrategy;
 import com.eskisehir.eventapi.domain.model.Poi;
 import com.eskisehir.eventapi.dto.RecommendationRequest;
@@ -17,16 +19,22 @@ import java.util.stream.Collectors;
 public class RecommendationEngine {
 
     private final RecommendationService recommendationService;
+    private final RecommendationCandidateGenerator candidateGenerator;
+    private final RecommendationRanker recommendationRanker;
     private final RecommendationStrategy recommendationStrategy;
     private final ColdStartStrategy coldStartStrategy;
     private final BanditEventRepository banditEventRepository;
 
     public RecommendationEngine(
             RecommendationService recommendationService,
+            RecommendationCandidateGenerator candidateGenerator,
+            RecommendationRanker recommendationRanker,
             @Qualifier("thompsonSamplingStrategy") RecommendationStrategy recommendationStrategy,
             ColdStartStrategy coldStartStrategy,
             BanditEventRepository banditEventRepository) {
         this.recommendationService = recommendationService;
+        this.candidateGenerator = candidateGenerator;
+        this.recommendationRanker = recommendationRanker;
         this.recommendationStrategy = recommendationStrategy;
         this.coldStartStrategy = coldStartStrategy;
         this.banditEventRepository = banditEventRepository;
@@ -38,7 +46,7 @@ public class RecommendationEngine {
     }
 
     public Map<Poi, Double> getRecommendationScores(RecommendationRequest request) {
-        List<Poi> candidates = recommendationService.getAllActivePois();
+        List<Poi> candidates = candidateGenerator.generateCandidates(request);
         if (candidates.isEmpty()) {
             return Map.of();
         }
@@ -50,7 +58,7 @@ public class RecommendationEngine {
 
         Map<Poi, Double> scored = useColdStart
                 ? coldStartStrategy.scorePois(request, candidates)
-                : recommendationStrategy.scorePois(request, candidates);
+                : recommendationRanker.rankCandidates(request, candidates);
 
         return scored.entrySet().stream()
                 .limit(request.getEffectiveLimit())

@@ -173,7 +173,24 @@ class RecommendationControllerTest {
                             return Collections.emptyList();
                         }
                     },
-                    (request, candidates) -> Collections.emptyMap(),
+                    new com.eskisehir.eventapi.algorithm.RecommendationCandidateGenerator() {
+                        @Override
+                        public List<Poi> generateCandidates(RecommendationRequest request) {
+                            return Collections.emptyList();
+                        }
+                    },
+                    new com.eskisehir.eventapi.algorithm.RecommendationRanker() {
+                        @Override
+                        public Map<Poi, Double> rankCandidates(RecommendationRequest request, List<Poi> candidates) {
+                            return Collections.emptyMap();
+                        }
+                    },
+                    new com.eskisehir.eventapi.algorithm.RecommendationStrategy() {
+                        @Override
+                        public Map<Poi, Double> scorePois(RecommendationRequest request, List<Poi> candidates) {
+                            return Collections.emptyMap();
+                        }
+                    },
                     new com.eskisehir.eventapi.algorithm.ColdStartStrategy() {
                         @Override
                         public java.util.Map<Poi, Double> scorePois(RecommendationRequest request, List<Poi> candidates) {
