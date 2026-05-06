@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Application Name -->
+    <string name="app_name">Eskişehir Events</string>
+
+    <!-- ======================== Authentication & Login ======================== -->
+    <string name="auth_login">Login</string>
+    <string name="auth_register">Register</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_password_confirm">Confirm Password</string>
+    <string name="auth_first_name">First Name</string>
+    <string name="auth_last_name">Last Name</string>
+    <string name="auth_phone">Phone Number</string>
+    <string name="auth_forgot_password">Forgot Password?</string>
+    <string name="auth_already_have_account">Already have an account?</string>
+    <string name="auth_no_account">Don\'t have an account?</string>
+    <string name="auth_login_button">Login</string>
+    <string name="auth_register_button">Register</string>
+    <string name="auth_logout">Logout</string>
+    <string name="auth_invalid_email">Invalid email address</string>
+    <string name="auth_password_short">Password must be at least 6 characters</string>
+    <string name="auth_passwords_not_match">Passwords do not match</string>
+    <string name="auth_login_success">Successfully logged in</string>
+    <string name="auth_register_success">Registration successful. Please login</string>
+    <string name="auth_login_failed">Login failed. Please check your credentials</string>
+
+    <!-- ======================== Onboarding ======================== -->
+    <string name="onboarding_welcome">Welcome</string>
+    <string name="onboarding_title_1">Personalized Recommendations</string>
+    <string name="onboarding_desc_1">Get custom route recommendations based on your preferences</string>
+    <string name="onboarding_title_2">Dynamic Route Planning</string>
+    <string name="onboarding_desc_2">Discover optimal routes that fit your budget and schedule</string>
+    <string name="onboarding_title_3">AI-Powered Suggestions</string>
+    <string name="onboarding_desc_3">System learns from your preferences to provide better recommendations</string>
+    <string name="onboarding_title_4">Support Local Businesses</string>
+    <string name="onboarding_desc_4">Discover and support local businesses in Eskişehir</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_finish">Start</string>
+
+    <!-- ======================== Preferences Setup ======================== -->
+    <string name="preferences_title">Set Your Preferences</string>
+    <string name="preferences_interests">Interests</string>
+    <string name="preferences_interests_desc">What types of events and places do you like?</string>
+    <string name="preferences_museums">Museums</string>
+    <string name="preferences_parks">Parks</string>
+    <string name="preferences_cafes">Cafes</string>
+    <string name="preferences_restaurants">Restaurants</string>
+    <string name="preferences_cultural">Cultural Sites</string>
+    <string name="preferences_historical">Historical Sites</string>
+    <string name="preferences_outdoor">Outdoor Activities</string>
+    <string name="preferences_budget">Budget</string>
+    <string name="preferences_budget_desc">Budget per route</string>
+    <string name="preferences_budget_low">Low (0-100 ₺)</string>
+    <string name="preferences_budget_medium">Medium (100-500 ₺)</string>
+    <string name="preferences_budget_high">High (500+ ₺)</string>
+    <string name="preferences_transportation">Transportation Mode</string>
+    <string name="preferences_walking">Walking</string>
+    <string name="preferences_public_transport">Public Transport</string>
+    <string name="preferences_car">Car</string>
+    <string name="preferences_bike">Bike</string>
+    <string name="preferences_crowd">Crowd Tolerance</string>
+    <string name="preferences_crowd_low">Low (quiet places)</string>
+    <string name="preferences_crowd_medium">Medium</string>
+    <string name="preferences_crowd_high">High (lively places)</string>
+    <string name="preferences_sustainability">Sustainability</string>
+    <string name="preferences_sustainability_desc">Your eco-friendly preferences</string>
+    <string name="preferences_eco_friendly">Eco-Friendly</string>
+    <string name="preferences_save">Save</string>
+    <string name="preferences_saved">Preferences saved</string>
+
+    <!-- ======================== Home Screen ======================== -->
+    <string name="home_title">Home</string>
+    <string name="home_welcome">Hello</string>
+    <string name="home_quick_actions">Quick Actions</string>
+    <string name="home_get_recommendations">Get Recommendations</string>
+    <string name="home_discover_places">Discover Places</string>
+    <string name="home_my_routes">My Routes</string>
+    <string name="home_featured">Featured</string>
+    <string name="home_nearby">Nearby</string>
+    <string name="home_popular_today">Popular Today</string>
+    <string name="home_no_data">No data yet</string>
+    <string name="home_loading">Loading...</string>
+
+    <!-- ======================== Place Discovery ======================== -->
+    <string name="discovery_title">Discover Places</string>
+    <string name="discovery_search_placeholder">Search places...</string>
+    <string name="discovery_filter">Filter</string>
+    <string name="discovery_sort">Sort</string>
+    <string name="discovery_sort_popular">Popular</string>
+    <string name="discovery_sort_nearest">Nearest</string>
+    <string name="discovery_sort_rating">Highest Rated</string>
+    <string name="discovery_category_all">All</string>
+    <string name="discovery_category_museum">Museum</string>
+    <string name="discovery_category_park">Park</string>
+    <string name="discovery_category_cafe">Cafe</string>
+    <string name="discovery_category_restaurant">Restaurant</string>
+    <string name="discovery_no_results">No results found</string>
+    <string name="discovery_empty_state">No places added yet</string>
+    <string name="discovery_place_rating">Rating</string>
+    <string name="discovery_place_distance">Distance</string>
+    <string name="discovery_place_duration">Est. Duration</string>
+    <string name="discovery_place_budget">Budget</string>
+
+    <!-- ======================== Recommendations ======================== -->
+    <string name="recommendations_title">Recommendations</string>
+    <string name="recommendations_generating">Generating recommendations...</string>
+    <string name="recommendations_no_data">No recommendations yet</string>
+    <string name="recommendations_why">Why recommended?</string>
+    <string name="recommendations_match_score">Match: %d%%</string>
+    <string name="recommendations_reason_preference">Matches your preferences</string>
+    <string name="recommendations_reason_popular">Popular</string>
+    <string name="recommendations_reason_nearby">Near you</string>
+    <string name="recommendations_reason_similar">Similar to places you like</string>
+    <string name="recommendations_save">Save</string>
+    <string name="recommendations_add_to_route">Add to Route</string>
+    <string name="recommendations_share">Share</string>
+    <string name="recommendations_similar">Similar Recommendations</string>
+
+    <!-- ======================== Route Details ======================== -->
+    <string name="route_title">Route Details</string>
+    <string name="route_duration">Total Duration</string>
+    <string name="route_distance">Total Distance</string>
+    <string name="route_budget">Est. Budget</string>
+    <string name="route_places_count">Number of Places</string>
+    <string name="route_start">Start</string>
+    <string name="route_save">Save</string>
+    <string name="route_share">Share</string>
+    <string name="route_start_navigation">Start Navigation</string>
+    <string name="route_itinerary">Detailed Tour</string>
+    <string name="route_step">Step</string>
+    <string name="route_via">Via</string>
+    <string name="route_estimated_arrival">Est. Arrival</string>
+    <string name="route_crowd_level">Crowd Level</string>
+    <string name="route_sustainability_score">Sustainability Score</string>
+
+    <!-- ======================== Map Screen ======================== -->
+    <string name="map_title">Map</string>
+    <string name="map_current_location">Current Location</string>
+    <string name="map_zoom_in">Zoom In</string>
+    <string name="map_zoom_out">Zoom Out</string>
+    <string name="map_show_route">Show Route</string>
+    <string name="map_hide_route">Hide Route</string>
+    <string name="map_my_location">My Location</string>
+
+    <!-- ======================== Saved Routes ======================== -->
+    <string name="saved_routes_title">Saved Routes</string>
+    <string name="saved_routes_empty">No saved routes yet</string>
+    <string name="saved_routes_delete">Delete</string>
+    <string name="saved_routes_edit">Edit</string>
+    <string name="saved_routes_delete_confirmation">Are you sure you want to delete this route?</string>
+    <string name="saved_routes_delete_cancel">Cancel</string>
+    <string name="saved_routes_delete_confirm">Delete</string>
+    <string name="saved_routes_visit_date">Visit Date</string>
+
+    <!-- ======================== Feedback Screen ======================== -->
+    <string name="feedback_title">Feedback</string>
+    <string name="feedback_subtitle">Tell us about this route</string>
+    <string name="feedback_rating">Rating</string>
+    <string name="feedback_rating_1">Very Bad</string>
+    <string name="feedback_rating_2">Bad</string>
+    <string name="feedback_rating_3">Neutral</string>
+    <string name="feedback_rating_4">Good</string>
+    <string name="feedback_rating_5">Very Good</string>
+    <string name="feedback_comment">Comment</string>
+    <string name="feedback_comment_placeholder">Tell us about your experience...</string>
+    <string name="feedback_visited">Did you visit?</string>
+    <string name="feedback_yes">Yes</string>
+    <string name="feedback_no">No</string>
+    <string name="feedback_crowded">Was it crowded?</string>
+    <string name="feedback_not_crowded">Not Crowded</string>
+    <string name="feedback_crowded">Crowded</string>
+    <string name="feedback_would_recommend">I would recommend</string>
+    <string name="feedback_submit">Submit</string>
+    <string name="feedback_cancel">Cancel</string>
+    <string name="feedback_submitted">Your feedback has been saved, thank you!</string>
+
+    <!-- ======================== Profile Screen ======================== -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_account">Account</string>
+    <string name="profile_name">Full Name</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_phone">Phone</string>
+    <string name="profile_preferences">Preferences</string>
+    <string name="profile_edit_preferences">Edit Preferences</string>
+    <string name="profile_statistics">Statistics</string>
+    <string name="profile_routes_created">Routes Created</string>
+    <string name="profile_routes_completed">Routes Completed</string>
+    <string name="profile_places_visited">Places Visited</string>
+    <string name="profile_feedback_given">Feedback Given</string>
+    <string name="profile_settings">Settings</string>
+    <string name="profile_notification_settings">Notification Settings</string>
+    <string name="profile_language">Language</string>
+    <string name="profile_about">About</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_delete_account">Delete Account</string>
+    <string name="profile_delete_account_warning">Your account and all data will be permanently deleted</string>
+
+    <!-- ======================== Common UI Elements ======================== -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_save">Save</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_edit">Edit</string>
+    <string name="common_close">Close</string>
+    <string name="common_loading">Loading...</string>
+    <string name="common_error">Error</string>
+    <string name="common_try_again">Try Again</string>
+    <string name="common_no_internet">No Internet Connection</string>
+    <string name="common_offline">Offline Mode</string>
+    <string name="common_back">Back</string>
+    <string name="common_next">Next</string>
+    <string name="common_finish">Finish</string>
+    <string name="common_continue">Continue</string>
+    <string name="common_success">Success</string>
+    <string name="common_filter">Filter</string>
+    <string name="common_apply">Apply</string>
+    <string name="common_reset">Reset</string>
+    <string name="common_search">Search</string>
+    <string name="common_empty_state">No Data</string>
+    <string name="common_empty_state_desc">This section is currently empty</string>
+
+    <!-- ======================== Error Messages ======================== -->
+    <string name="error_network">Network error. Please try again</string>
+    <string name="error_server">Server error. Please try later</string>
+    <string name="error_timeout">Request timeout</string>
+    <string name="error_unknown">Unknown error occurred</string>
+    <string name="error_invalid_input">Invalid input</string>
+    <string name="error_permission_denied">Permission denied</string>
+    <string name="error_location_required">Location permission required</string>
+    <string name="error_no_data">No data found</string>
+
+    <!-- ======================== Validation Messages ======================== -->
+    <string name="validation_required">This field is required</string>
+    <string name="validation_email_invalid">Invalid email address</string>
+    <string name="validation_password_short">Password must be at least 6 characters</string>
+    <string name="validation_phone_invalid">Invalid phone number</string>
+
+    <!-- ======================== Offline & Cache Messages ======================== -->
+    <string name="offline_mode_title">Offline Mode</string>
+    <string name="offline_mode_desc">You are working without internet connection</string>
+    <string name="offline_cached_data">Viewing previously cached data</string>
+    <string name="offline_changes_will_sync">Changes will be synced when connection is restored</string>
+    <string name="cache_last_updated">Last updated:</string>
+    <string name="cache_refresh">Refresh</string>
+</resources>
