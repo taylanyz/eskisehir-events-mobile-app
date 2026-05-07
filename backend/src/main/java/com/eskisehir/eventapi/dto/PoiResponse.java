@@ -1,6 +1,7 @@
 package com.eskisehir.eventapi.dto;
 
 import com.eskisehir.eventapi.domain.model.*;
+import com.eskisehir.eventapi.model.POI;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -66,6 +67,37 @@ public class PoiResponse {
         r.setRankingScore(rankingScore);
         r.setOpeningTime(poi.getOpeningTime());
         r.setClosingTime(poi.getClosingTime());
+        return r;
+    }
+
+    /**
+     * Convert Phase 13 POI to PoiResponse (for Phase 13 endpoints)
+     */
+    public static PoiResponse fromEntity(POI poi) {
+        PoiResponse r = new PoiResponse();
+        r.setId(null);  // Phase 13 POI uses String ID
+        r.setName(poi.getName());
+        r.setDescription(poi.getDescription());
+        r.setCategory(null);  // Phase 13 uses POICategory enum
+        r.setDistrict(poi.getDistrict() != null ? String.valueOf(poi.getDistrict()) : null);
+        r.setLatitude(poi.getLatitude());
+        r.setLongitude(poi.getLongitude());
+        r.setVenue(null);  // Not in Phase 13 POI
+        r.setDate(null);  // Not in Phase 13 POI
+        r.setPrice(null);  // Use estimatedCost instead
+        r.setBudgetLevel(null);  // Use priceLevel instead
+        r.setImageUrl(null);  // Not in Phase 13 POI
+        r.setTags(null);  // Tags stored as comma-separated string in Phase 13 POI, convert if needed
+        r.setEstimatedVisitMinutes(poi.getEstimatedVisitDuration());
+        r.setIndoorOutdoor(null);  // Not in Phase 13 POI
+        r.setFamilyFriendly(poi.getChildFriendly());
+        r.setSustainabilityScore(poi.getSustainabilityScore() != null ? poi.getSustainabilityScore().doubleValue() : null);
+        r.setLocalBusinessScore(poi.getLocalBusinessScore() != null ? poi.getLocalBusinessScore().doubleValue() : null);
+        r.setCrowdProxy(poi.getCrowdProxyScore() != null ? poi.getCrowdProxyScore().doubleValue() : null);
+        r.setPopularityScore(poi.getPopularityScore() != null ? poi.getPopularityScore().doubleValue() : null);
+        r.setRankingScore(null);
+        r.setOpeningTime(null);  // Not in Phase 13 POI
+        r.setClosingTime(null);  // Not in Phase 13 POI
         return r;
     }
 

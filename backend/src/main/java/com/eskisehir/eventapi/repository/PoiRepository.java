@@ -11,8 +11,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Spring Data JPA repository for Poi entities.
+ * Spring Data JPA repository for Poi entities (Legacy - Pre-Phase 13).
  * Provides CRUD, category filtering, search, and date-based lookups.
+ * 
+ * NOTE: This repository is for the old Poi entity.
+ * For Phase 13 POI operations, use POIRepository instead.
  */
 @Repository
 public interface PoiRepository extends JpaRepository<Poi, Long> {
