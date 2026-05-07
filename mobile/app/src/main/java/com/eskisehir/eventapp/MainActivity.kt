@@ -44,18 +44,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val lightColors = lightColorScheme(
-                primary = Color(0xFF6200EA),
+                primary = Color(0xFF4CAF50),           // Yeşil
                 onPrimary = Color.White,
-                primaryContainer = Color(0xFFEADDFF),
-                onPrimaryContainer = Color(0xFF21005D),
-                secondary = Color(0xFF03DAC6),
-                onSecondary = Color.Black,
-                tertiary = Color(0xFFFF0266),
-                onTertiary = Color.White,
-                background = Color(0xFFFFFBFE),
-                onBackground = Color(0xFF1C1B1F),
-                surface = Color(0xFFFFFBFE),
-                onSurface = Color(0xFF1C1B1F),
+                primaryContainer = Color(0xFFC8E6C9), // Açık yeşil
+                onPrimaryContainer = Color(0xFF1B5E20),
+                secondary = Color(0xFF66BB6A),         // Açık yeşil
+                onSecondary = Color.White,
+                tertiary = Color(0xFF81C784),          // Çok açık yeşil
+                onTertiary = Color.Black,
+                background = Color(0xFFE8F5E9),        // Çok açık yeşil arka plan
+                onBackground = Color(0xFF1B5E20),      // Koyu yeşil metin
+                surface = Color(0xFFF1F8F6),           // Yüzey açık yeşil
+                onSurface = Color(0xFF1B5E20),         // Koyu yeşil metin
             )
             
             MaterialTheme(colorScheme = lightColors) {
