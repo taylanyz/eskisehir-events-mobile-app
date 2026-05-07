@@ -1,6 +1,7 @@
 package com.eskisehir.eventapp.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.eskisehir.eventapp.ui.viewmodel.AuthState
@@ -43,13 +45,18 @@ fun LoginScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color.White)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Text(
             text = "Giriş Yap",
             style = MaterialTheme.typography.headlineLarge,
@@ -132,6 +139,7 @@ fun LoginScreen(
             TextButton(onClick = onNavigateToRegister) {
                 Text("Kayıt Ol")
             }
+        }
         }
     }
 }
