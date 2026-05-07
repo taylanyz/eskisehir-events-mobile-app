@@ -85,7 +85,7 @@ public class POISeedDataService {
      * Find POIs by category
      */
     public List<POI> findByCategory(String category) {
-        return poiRepository.findByCategory(category);
+        return poiRepository.findByCategory(POI.POICategory.valueOf(category));
     }
     
     /**
@@ -131,7 +131,7 @@ public class POISeedDataService {
      * Get POI count by category
      */
     public Long getPOICountByCategory(String category) {
-        return (long) poiRepository.findByCategory(category).size();
+        return (long) poiRepository.findByCategory(POI.POICategory.valueOf(category)).size();
     }
     
     /**
@@ -200,44 +200,28 @@ public class POISeedDataService {
      * Find POIs by district
      */
     public List<POI> findByDistrict(String district) {
-        return poiRepository.findAll()
-            .stream()
-            .filter(poi -> poi.getDistrict() != null && String.valueOf(poi.getDistrict()).equalsIgnoreCase(district))
-            .sorted(Comparator.comparingDouble(POI::getAverageScore).reversed())
-            .collect(Collectors.toList());
+        return poiRepository.findByDistrict(POI.District.valueOf(district));
     }
     
     /**
      * Find wheelchair accessible POIs
      */
     public List<POI> findAccessiblePOIs() {
-        return poiRepository.findAll()
-            .stream()
-            .filter(poi -> poi.getWheelchairAccessible() != null && poi.getWheelchairAccessible())
-            .sorted(Comparator.comparingDouble(POI::getAverageScore).reversed())
-            .collect(Collectors.toList());
+        return poiRepository.findAccessiblePOIs();
     }
     
     /**
      * Find family-friendly POIs
      */
     public List<POI> findFamilyFriendlyPOIs() {
-        return poiRepository.findAll()
-            .stream()
-            .filter(poi -> poi.getChildFriendly() != null && poi.getChildFriendly())
-            .sorted(Comparator.comparingDouble(POI::getAverageScore).reversed())
-            .collect(Collectors.toList());
+        return poiRepository.findFamilyFriendlyPOIs();
     }
     
     /**
      * Find free POIs
      */
     public List<POI> findFreePOIs() {
-        return poiRepository.findAll()
-            .stream()
-            .filter(poi -> poi.getPriceLevel() != null && "FREE".equalsIgnoreCase(String.valueOf(poi.getPriceLevel())))
-            .sorted(Comparator.comparingDouble(POI::getAverageScore).reversed())
-            .collect(Collectors.toList());
+        return poiRepository.findFreePOIs();
     }
     
     /**

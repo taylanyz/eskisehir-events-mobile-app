@@ -19,12 +19,12 @@ import java.util.List;
 public interface POIPhase13Repository extends JpaRepository<POI, String> {
     
     // Category queries
-    List<POI> findByCategory(String category);
+    List<POI> findByCategory(POI.POICategory category);
     
     // District queries
-    List<POI> findByDistrict(String district);
+    List<POI> findByDistrict(POI.District district);
     
-    // Geographic queries (bounding box)
+    // Count queries
     @Query("SELECT p FROM POI p WHERE p.latitude BETWEEN :minLat AND :maxLat " +
            "AND p.longitude BETWEEN :minLon AND :maxLon")
     List<POI> findByGeographicBounds(
@@ -61,7 +61,7 @@ public interface POIPhase13Repository extends JpaRepository<POI, String> {
     List<POI> searchPOIs(@Param("query") String query);
     
     // Statistics
-    Long countByCategory(String category);
+    Long countByCategory(POI.POICategory category);
     
-    Long countByDistrict(String district);
+    Long countByDistrict(POI.District district);
 }
