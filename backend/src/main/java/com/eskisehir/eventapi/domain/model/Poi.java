@@ -16,7 +16,7 @@ import java.util.List;
  * are normalized to [0, 1] for use in recommendation and route optimization.
  */
 @Entity
-@Table(name = "poi_old")
+@Table(name = "pois")
 public class Poi {
 
     @Id

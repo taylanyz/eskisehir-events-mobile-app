@@ -34,7 +34,7 @@ fun RecommendationsScreen(onPoiClick: (Long) -> Unit) {
     var longitude by remember { mutableStateOf("30.5256") }
 
     LaunchedEffect(Unit) {
-        // İlk yükleme
+        // İlk yükleme - önerileri hemen getir
         val request = RecommendationRequest(
             preferredCategories = selectedCategories.toList(),
             preferredTags = emptyList(),

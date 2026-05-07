@@ -20,25 +20,25 @@ public class WeatherData {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(nullable = false)
+    @Column(name = "weather_condition")
     private String condition; // "Sunny", "Rainy", "Cloudy", "Snowy", etc.
 
-    @Column(nullable = false)
+    @Column
     private Integer temperature; // Celsius
 
-    @Column(nullable = false)
+    @Column
     private Integer humidity; // 0-100%
 
-    @Column(nullable = false)
+    @Column(name = "wind_speed")
     private Double windSpeed; // m/s
 
-    @Column(nullable = false)
+    @Transient
     private Boolean isRaining;
 
-    @Column(nullable = false)
+    @Transient
     private LocalDateTime timestamp;
 
-    @Column(nullable = false)
+    @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated;
 
     public WeatherData() {

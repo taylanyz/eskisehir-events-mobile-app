@@ -42,6 +42,14 @@ private fun AppShell() {
     val navBackStackEntry by appNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val screenLabels = mapOf(
+        "home" to "Anasayfa",
+        "explore" to "Keşfet",
+        "recommendations" to "Öneriler",
+        "favorites" to "Favoriler",
+        "profile" to "Profil"
+    )
+
     val bottomNavItems = listOf(
         Screen.Home to Icons.Default.Home,
         Screen.Explore to Icons.Default.Explore,
@@ -56,7 +64,7 @@ private fun AppShell() {
                 bottomNavItems.forEach { (screen, icon) ->
                     NavigationBarItem(
                         icon = { Icon(icon, contentDescription = screen.route) },
-                        label = { Text(screen.route.replaceFirstChar { it.uppercase() }) },
+                        label = { Text(screenLabels[screen.route] ?: screen.route) },
                         selected = currentDestination?.route == screen.route,
                         onClick = {
                             appNavController.navigate(screen.route) {
@@ -96,7 +104,11 @@ private fun AppShell() {
                 FavoritesScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen()
+                ProfileScreen(onLogoutSuccess = {
+                    appNavController.navigate("auth") {
+                        popUpTo("app") { inclusive = true }
+                    }
+                })
             }
             composable(
                 route = Screen.EventDetail.route,

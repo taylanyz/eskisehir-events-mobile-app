@@ -37,7 +37,7 @@ fun RouteDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Route Details") },
+                title = { Text("Rota Detayları") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -99,7 +99,7 @@ fun RouteDetailScreen(
                             .fillMaxWidth()
                             .height(50.dp)
                     ) {
-                        Text("Start Turn-by-Turn Navigation")
+                        Text("Adım Adım Navigasyonu Başlat")
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }

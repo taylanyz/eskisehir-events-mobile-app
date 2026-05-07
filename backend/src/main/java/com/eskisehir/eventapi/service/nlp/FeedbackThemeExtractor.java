@@ -40,7 +40,7 @@ public class FeedbackThemeExtractor {
         )),
         Map.entry(FeedbackTheme.SAFETY_CONCERN, Set.of(
             "güvenlik", "tehlike", "korkuluyor", "korkutucu", "aman", "risk", "tehlikeli yer",
-            "safety", "danger", "unsafe", "scary", "risk", "concerned"
+            "safety", "danger", "unsafe", "scary", "concerned"
         ))
     );
     

@@ -41,7 +41,7 @@ fun RouteGeneratorScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Generate Route") },
+                title = { Text("Rota Oluştur") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -148,7 +148,7 @@ fun RouteGeneratorScreen(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
-                    Text("Generate Optimized Route")
+                    Text("Optimize Edilmiş Rota Oluştur")
                 }
             }
 

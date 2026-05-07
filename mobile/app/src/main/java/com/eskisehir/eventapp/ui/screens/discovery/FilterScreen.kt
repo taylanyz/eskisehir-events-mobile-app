@@ -31,7 +31,7 @@ fun FilterScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Advanced Filters") },
+                title = { Text("Gelişmiş Filtreler") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
@@ -142,7 +142,7 @@ fun FilterScreen(
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)
                 ) {
-                    Text("Apply Filters")
+                    Text("Filtreleri Uygula")
                 }
             }
         }

@@ -21,10 +21,13 @@ import java.util.Optional;
  * Endpoints:
  * - POST /api/interactions : Record view, click, save, add_to_route interactions
  * - POST /api/feedback : Record visit confirmation and user feedback
+ * 
+ * DISABLED: Duplicate endpoint mapping with InteractionController. 
+ * Using InteractionController for now.
  */
-@RestController
-@RequestMapping("/api/interactions")
-@CrossOrigin(origins = "*")
+//@RestController
+//@RequestMapping("/api/interactions")
+//@CrossOrigin(origins = "*")
 public class InteractionTrackingController {
 
     private static final Logger log = LoggerFactory.getLogger(InteractionTrackingController.class);

@@ -12,8 +12,9 @@ backend/*.log
 
 # Mobile - Gradle build outputs
 mobile/.gradle/
-mobile/build/
 mobile/.gradle
+mobile/build/
+mobile/app/build/
 mobile/local.properties
 
 # IDE

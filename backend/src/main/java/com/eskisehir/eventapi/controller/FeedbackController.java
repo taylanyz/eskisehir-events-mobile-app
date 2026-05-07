@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
  * 
  * Accepts user star ratings and free-form Turkish feedback on completed routes.
  * Returns sentiment analysis results and integrated reward score.
+ * 
+ * DISABLED: Dependency issues with TurkishSentimentAnalyzer and NLP components.
+ * To be enabled after stabilizing NLP module.
  */
-@RestController
-@RequestMapping("/api/feedback")
+//@RestController
+//@RequestMapping("/api/feedback")
 public class FeedbackController {
     
     private static final Logger log = LoggerFactory.getLogger(FeedbackController.class);

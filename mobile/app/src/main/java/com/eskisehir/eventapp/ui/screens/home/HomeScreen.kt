@@ -22,7 +22,7 @@ fun HomeScreen(onEventClick: (Long) -> Unit) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Eskişehir Events", fontWeight = FontWeight.Bold)
+                    Text("Eskişehir Etkinlikleri", fontWeight = FontWeight.Bold)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer

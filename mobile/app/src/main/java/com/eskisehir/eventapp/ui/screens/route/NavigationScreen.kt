@@ -66,7 +66,7 @@ fun NavigationScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Turn-by-Turn Navigation") },
+                title = { Text("Adım Adım Navigasyon") },
                 navigationIcon = {
                     IconButton(onClick = {
                         viewModel.stopNavigation()
