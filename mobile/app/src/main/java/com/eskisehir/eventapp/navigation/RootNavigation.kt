@@ -21,7 +21,7 @@ fun RootNavigation(tokenManager: TokenManager) {
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) "app" else "auth"
+        startDestination = "app"  // Always show app, user can login later
     ) {
         authNavGraph(navController)
         appNavGraph(navController)

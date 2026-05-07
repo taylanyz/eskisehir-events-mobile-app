@@ -47,7 +47,10 @@ class RecommendationViewModel @Inject constructor(
                     _recommendations.value = result.data
                 }
                 is Result.Error -> {
-                    _errorMessage.value = result.message ?: "Recommendation loading failed"
+                    // Network error detected - showing mock data for debugging
+                    _errorMessage.value = "⚠️ API Error: ${result.message ?: "Failed to load recommendations"}"
+                    // Add mock data to help debug UI
+                    _recommendations.value = getMockRecommendations()
                 }
                 else -> {
                     _errorMessage.value = "Unknown recommendation error"
@@ -68,7 +71,10 @@ class RecommendationViewModel @Inject constructor(
                     _trending.value = result.data
                 }
                 is Result.Error -> {
-                    _errorMessage.value = result.message ?: "Trending loading failed"
+                    // Network error detected - showing mock data for debugging
+                    _errorMessage.value = "⚠️ API Error: ${result.message ?: "Failed to load trending"}"
+                    // Add mock data to help debug UI
+                    _trending.value = getMockTrending()
                 }
                 else -> {
                     _errorMessage.value = "Unknown trending error"
@@ -148,5 +154,111 @@ class RecommendationViewModel @Inject constructor(
 
     fun clearInteractionMessage() {
         _interactionMessage.value = null
+    }
+
+    private fun getMockTrending(): List<PoiResponse> {
+        return listOf(
+            PoiResponse(
+                id = 1,
+                name = "Hamamönü Café",
+                description = "Popular local café",
+                category = com.eskisehir.eventapp.data.model.Category.CAFE,
+                district = "Çankaya",
+                latitude = 39.7667,
+                longitude = 30.5256,
+                venue = "Café",
+                date = null,
+                price = 50.0,
+                budgetLevel = "Budget",
+                imageUrl = null,
+                tags = listOf("local", "wifi"),
+                estimatedVisitMinutes = 60,
+                indoorOutdoor = "Indoor",
+                familyFriendly = true,
+                sustainabilityScore = 0.7,
+                localBusinessScore = 0.9,
+                crowdProxy = 0.5,
+                popularityScore = 0.8,
+                rankingScore = 4.5,
+                weather = null
+            ),
+            PoiResponse(
+                id = 2,
+                name = "Kızılırmak Valley",
+                description = "Beautiful valley park",
+                category = com.eskisehir.eventapp.data.model.Category.PARK,
+                district = "Keçiören",
+                latitude = 39.7700,
+                longitude = 30.5300,
+                venue = "Park",
+                date = null,
+                price = null,
+                budgetLevel = "Free",
+                imageUrl = null,
+                tags = listOf("outdoor", "nature"),
+                estimatedVisitMinutes = 120,
+                indoorOutdoor = "Outdoor",
+                familyFriendly = true,
+                sustainabilityScore = 0.95,
+                localBusinessScore = 0.0,
+                crowdProxy = 0.6,
+                popularityScore = 0.9,
+                rankingScore = 4.8,
+                weather = null
+            )
+        )
+    }
+
+    private fun getMockRecommendations(): List<PoiResponse> {
+        return listOf(
+            PoiResponse(
+                id = 3,
+                name = "Ziraat Restaurant",
+                description = "Traditional Turkish food",
+                category = com.eskisehir.eventapp.data.model.Category.RESTAURANT,
+                district = "Çankaya",
+                latitude = 39.7700,
+                longitude = 30.5200,
+                venue = "Restaurant",
+                date = null,
+                price = 150.0,
+                budgetLevel = "Mid-Range",
+                imageUrl = null,
+                tags = listOf("family", "traditional"),
+                estimatedVisitMinutes = 90,
+                indoorOutdoor = "Indoor",
+                familyFriendly = true,
+                sustainabilityScore = 0.6,
+                localBusinessScore = 0.8,
+                crowdProxy = 0.7,
+                popularityScore = 0.75,
+                rankingScore = 4.3,
+                weather = null
+            ),
+            PoiResponse(
+                id = 4,
+                name = "Seğmenler Park",
+                description = "Family-friendly park",
+                category = com.eskisehir.eventapp.data.model.Category.PARK,
+                district = "Çankaya",
+                latitude = 39.7600,
+                longitude = 30.5400,
+                venue = "Park",
+                date = null,
+                price = null,
+                budgetLevel = "Free",
+                imageUrl = null,
+                tags = listOf("family", "outdoor"),
+                estimatedVisitMinutes = 100,
+                indoorOutdoor = "Outdoor",
+                familyFriendly = true,
+                sustainabilityScore = 0.85,
+                localBusinessScore = 0.0,
+                crowdProxy = 0.5,
+                popularityScore = 0.7,
+                rankingScore = 4.6,
+                weather = null
+            )
+        )
     }
 }

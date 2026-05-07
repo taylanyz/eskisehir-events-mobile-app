@@ -168,9 +168,9 @@
     <string name="feedback_visited">Did you visit?</string>
     <string name="feedback_yes">Yes</string>
     <string name="feedback_no">No</string>
-    <string name="feedback_crowded">Was it crowded?</string>
+    <string name="feedback_crowded_question">Was it crowded?</string>
     <string name="feedback_not_crowded">Not Crowded</string>
-    <string name="feedback_crowded">Crowded</string>
+    <string name="feedback_very_crowded">Crowded</string>
     <string name="feedback_would_recommend">I would recommend</string>
     <string name="feedback_submit">Submit</string>
     <string name="feedback_cancel">Cancel</string>

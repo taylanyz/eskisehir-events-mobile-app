@@ -1,0 +1,180 @@
+name: Test Suite & Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: eskisehir_events_test
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Display Java version
+      run: java -version
+    
+    - name: Build with Maven
+      run: |
+        cd backend
+        mvn clean install -DskipTests
+    
+    - name: Run Unit Tests
+      run: |
+        cd backend
+        mvn test -Dtest="POIPhase13RepositoryTest,POISeedDataServiceTest,POIStatisticsDtoTest,PoiResponseTest,FlyawayMigrationTest,RecommendationPerformanceBaselineTest"
+      env:
+        SPRING_PROFILES_ACTIVE: h2
+    
+    - name: Run Integration Tests (with Docker)
+      run: |
+        cd backend
+        mvn test -Dtest="POIIntegrationTestWithTestcontainers"
+      env:
+        SPRING_PROFILES_ACTIVE: postgres
+        DOCKER_HOST: unix:///var/run/docker.sock
+      continue-on-error: true  # Allow failure if Docker not available
+    
+    - name: Generate Test Report
+      if: always()
+      run: |
+        cd backend
+        find target/surefire-reports -name "*.xml" -type f
+    
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: backend/target/surefire-reports/
+    
+    - name: Performance Baseline Check
+      run: |
+        cd backend
+        mvn test -Dtest="RecommendationPerformanceBaselineTest" -q
+      env:
+        SPRING_PROFILES_ACTIVE: h2
+    
+    - name: Publish Test Results
+      if: always()
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: backend/target/surefire-reports/**/*.xml
+        check_name: Test Results
+    
+    - name: SonarQube Analysis (Optional)
+      run: |
+        cd backend
+        mvn sonar:sonar -Dsonar.projectKey=eskisehir-events
+      continue-on-error: true
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Build JAR
+      run: |
+        cd backend
+        mvn clean package -DskipTests
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      if: secrets.DOCKER_USERNAME != ''
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: backend
+        push: ${{ secrets.DOCKER_USERNAME != '' }}
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/eskisehir-events-api:${{ github.sha }}
+          ${{ secrets.DOCKER_USERNAME }}/eskisehir-events-api:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/eskisehir-events-api:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/eskisehir-events-api:buildcache,mode=max
+      if: secrets.DOCKER_USERNAME != ''
+    
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-jar
+        path: backend/target/event-api-*.jar
+
+  deploy-staging:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Deploy to Staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Add deployment script here
+        # Example: kubectl apply -f k8s/staging/
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        DEPLOY_HOST: ${{ secrets.STAGING_HOST }}
+
+  deploy-production:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Await Approval
+      run: |
+        echo "Waiting for production deployment approval..."
+        # Add approval workflow here
+    
+    - name: Deploy to Production
+      run: |
+        echo "Deploying to production environment..."
+        # Add deployment script here
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        DEPLOY_HOST: ${{ secrets.PRODUCTION_HOST }}

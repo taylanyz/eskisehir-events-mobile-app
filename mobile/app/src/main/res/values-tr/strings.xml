@@ -168,9 +168,9 @@
     <string name="feedback_visited">Ziyaret Ettiniz Mi?</string>
     <string name="feedback_yes">Evet</string>
     <string name="feedback_no">Hayır</string>
-    <string name="feedback_crowded">Kalabalık Mıydı?</string>
+    <string name="feedback_crowded_question">Kalabalık Mıydı?</string>
     <string name="feedback_not_crowded">Boş</string>
-    <string name="feedback_crowded">Kalabalık</string>
+    <string name="feedback_very_crowded">Kalabalık</string>
     <string name="feedback_would_recommend">Tavsiye Ederim</string>
     <string name="feedback_submit">Gönder</string>
     <string name="feedback_cancel">İptal</string>

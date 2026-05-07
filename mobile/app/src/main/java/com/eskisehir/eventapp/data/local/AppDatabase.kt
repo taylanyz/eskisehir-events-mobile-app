@@ -19,7 +19,7 @@ import com.eskisehir.eventapp.data.local.converters.POIConverters
         // Add other entities here: User::class, Route::class, etc.
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
 @TypeConverters(POIConverters::class)
 abstract class AppDatabase : RoomDatabase() {

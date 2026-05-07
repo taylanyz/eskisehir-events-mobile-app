@@ -9,8 +9,12 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -39,7 +43,31 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            val lightColors = lightColorScheme(
+                primary = Color(0xFF6200EA),
+                onPrimary = Color.White,
+                primaryContainer = Color(0xFFEADDFF),
+                onPrimaryContainer = Color(0xFF21005D),
+                secondary = Color(0xFF03DAC6),
+                onSecondary = Color.Black,
+                tertiary = Color(0xFFFF0266),
+                onTertiary = Color.White,
+                background = Color(0xFFFFFBFE),
+                onBackground = Color(0xFF1C1B1F),
+                surface = Color(0xFFFFFBFE),
+                onSurface = Color(0xFF1C1B1F),
+            )
+            
+            MaterialTheme(colorScheme = lightColors) {
+                // Set status bar to light
+                val view = LocalView.current
+                if (!view.isInEditMode) {
+                    SideEffect {
+                        val window = (view.context as MainActivity).window
+                        window.statusBarColor = lightColors.primary.copy(alpha = 0.9f).hashCode()
+                        WindowCompat.getInsetsController(window, view)?.isAppearanceLightStatusBars = true
+                    }
+                }
                 RootNavigation(tokenManager)
             }
         }

@@ -157,13 +157,6 @@ interface POIDAO {
     @Query("SELECT COUNT(DISTINCT category) FROM poi")
     suspend fun getCategoryCount(): Int
     
-    @Query("""
-        SELECT 
-            AVG(popularityScore) as popularityScore,
-            AVG(crowdProxyScore) as crowdProxyScore,
-            AVG(sustainabilityScore) as sustainabilityScore,
-            AVG(localBusinessScore) as localBusinessScore
-        FROM poi
-    """)
-    suspend fun getAverageScores(): Map<String, Float>
+    @Query("SELECT AVG(averageScore) FROM poi")
+    suspend fun getAverageScoreOverall(): Float?
 }

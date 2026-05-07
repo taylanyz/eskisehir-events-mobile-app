@@ -77,5 +77,8 @@ class POIRepositoryImpl @Inject constructor(
     
     override suspend fun getCategoryCount(): Int = poiDAO.getCategoryCount()
     
-    override suspend fun getAverageScores(): Map<String, Float> = poiDAO.getAverageScores()
+    override suspend fun getAverageScores(): Map<String, Float> {
+        val avg = poiDAO.getAverageScoreOverall() ?: 0f
+        return mapOf("averageScore" to avg)
+    }
 }

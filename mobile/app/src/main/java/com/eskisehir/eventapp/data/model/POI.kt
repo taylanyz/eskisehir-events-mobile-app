@@ -1,5 +1,7 @@
 package com.eskisehir.eventapp.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.UUID
 
 // POI Categories - 29 types
@@ -84,14 +86,16 @@ data class ProxyScores(
     val localBusinessScore: Float = 0f    // Ownership, employment, supply chain
 )
 
-// Main POI Data Model
+// Main POI Data Model - Flattened for Room database
+@Entity(tableName = "poi")
 data class POI(
     // Core Identification
+    @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
     val name: String,                      // Turkish name
     val englishName: String? = null,
-    val category: POICategory,
-    val district: District,
+    val category: String,                  // POICategory enum as string
+    val district: String,                  // District enum as string
     
     // Location & Geography (6 decimal precision = ~0.1m accuracy)
     val latitude: Double,                  // e.g., 39.742156
@@ -102,26 +106,39 @@ data class POI(
     val description: String? = null,       // Turkish description
     val englishDescription: String? = null,
     
-    // Operations
-    val operatingHours: OperatingHours = OperatingHours(),
+    // Operations (stored as JSON or string)
+    val operatingHours: String? = null,    // JSON string
     
     // Pricing
-    val priceLevel: PriceLevel = PriceLevel.FREE,
+    val priceLevel: String = "FREE",       // PriceLevel enum as string
     val estimatedCost: Float? = null,      // Average cost in TL
     val estimatedVisitDuration: Int? = null,  // in minutes
     
     // Classification
-    val tags: List<String> = emptyList(),  // e.g., ["historical", "family-friendly"]
-    val locationType: LocationType = LocationType.MIXED,
+    val tags: String? = null,              // JSON string or comma-separated
+    val locationType: String = "MIXED",    // LocationType enum as string
     
-    // Accessibility & Amenities
-    val accessibility: AccessibilityFeatures = AccessibilityFeatures(),
+    // Accessibility & Amenities (flattened from AccessibilityFeatures)
+    val wheelchairAccessible: Boolean = false,
+    val publicTransitAccess: Boolean = false,
+    val parkingAvailable: Boolean = false,
+    val restrooms: Boolean = false,
+    val childFriendly: Boolean = false,
+    val seniorFriendly: Boolean = false,
+    val petFriendly: Boolean = false,
     
-    // Contact
-    val contact: ContactInfo = ContactInfo(),
+    // Contact (flattened from ContactInfo)
+    val phoneNumber: String? = null,
+    val email: String? = null,
+    val website: String? = null,
+    val instagram: String? = null,
     
-    // Proxy Scores (calculated)
-    val scores: ProxyScores = ProxyScores(),
+    // Proxy Scores (flattened from ProxyScores)
+    val popularityScore: Float = 0f,       // Based on category, rating, reviews
+    val crowdProxyScore: Float = 0f,       // Time of day, day of week, capacity
+    val sustainabilityScore: Float = 0f,   // Environmental, cultural, local benefit
+    val localBusinessScore: Float = 0f,    // Ownership, employment, supply chain
+    val averageScore: Float = 0f,          // Average of all scores
     
     // Metadata
     val createdAt: Long = System.currentTimeMillis(),
@@ -137,7 +154,7 @@ data class POI(
     }
     
     // Human-readable location string
-    fun getLocationString(): String = "$address, ${district.name}"
+    fun getLocationString(): String = "$address, $district"
 }
 
 // Example POI data for testing/demo
@@ -145,39 +162,25 @@ fun createSamplePOI(): POI {
     return POI(
         name = "Kurşunlu Camii",
         englishName = "Kurşunlu Mosque",
-        category = POICategory.MOSQUE,
-        district = District.ODUNPAZARI,
+        category = "MOSQUE",
+        district = "ODUNPAZARI",
         latitude = 39.7423,
         longitude = 30.5152,
         address = "Kurşunlu Cami Sokak, Odunpazarı/Eskişehir",
         description = "Osmanlı döneminden kalma tarihi camii, şehrin en eski yapılarından biridir.",
         englishDescription = "Historic mosque from Ottoman period, one of the oldest structures in the city.",
-        priceLevel = PriceLevel.FREE,
-        tags = listOf("historical", "religious", "ottoman"),
-        locationType = LocationType.INDOOR,
-        accessibility = AccessibilityFeatures(
-            wheelchairAccessible = true,
-            publicTransitAccess = true,
-            restrooms = true,
-            seniorFriendly = true
-        ),
-        operatingHours = OperatingHours(
-            monday = "open",
-            tuesday = "open",
-            wednesday = "open",
-            thursday = "open",
-            friday = "open",
-            saturday = "open",
-            sunday = "open"
-        ),
-        contact = ContactInfo(
-            phoneNumber = "+90 222 123 4567"
-        ),
-        scores = ProxyScores(
-            popularityScore = 82f,
-            crowdProxyScore = 45f,
-            sustainabilityScore = 88f,
-            localBusinessScore = 92f
-        )
+        priceLevel = "FREE",
+        tags = "historical,religious,ottoman",
+        locationType = "INDOOR",
+        wheelchairAccessible = true,
+        publicTransitAccess = true,
+        restrooms = true,
+        seniorFriendly = true,
+        phoneNumber = "+90 222 123 4567",
+        popularityScore = 82f,
+        crowdProxyScore = 45f,
+        sustainabilityScore = 88f,
+        localBusinessScore = 92f,
+        averageScore = 81.75f
     )
 }

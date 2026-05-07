@@ -7,6 +7,7 @@ import com.eskisehir.eventapp.data.remote.AuthApi
 import com.eskisehir.eventapp.data.remote.AuthInterceptor
 import com.eskisehir.eventapp.data.remote.ErrorHandlingInterceptor
 import com.eskisehir.eventapp.data.remote.InteractionApi
+import com.eskisehir.eventapp.data.remote.NavigationApi
 import com.eskisehir.eventapp.data.remote.RecommendationApi
 import com.eskisehir.eventapp.data.remote.UserApi
 import dagger.Module
@@ -14,6 +15,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -38,7 +40,7 @@ annotation class BaseClientQualifier
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://192.168.1.100:8080/api/"  // Change to your backend URL
+    private const val BASE_URL = "http://10.0.2.2:8080/api/"  // 10.0.2.2 for emulator (host PC's localhost)
 
     @Provides
     @Singleton
@@ -66,6 +68,7 @@ object NetworkModule {
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(errorHandlingInterceptor)
+            .connectionSpecs(listOf(ConnectionSpec.CLEARTEXT, ConnectionSpec.MODERN_TLS))
             .build()
     }
 
@@ -99,6 +102,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(errorHandlingInterceptor)
             .addInterceptor(authInterceptor)
+            .connectionSpecs(listOf(ConnectionSpec.CLEARTEXT, ConnectionSpec.MODERN_TLS))
             .build()
     }
 
@@ -133,5 +137,16 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(InteractionApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNavigationApi(@AuthClientQualifier httpClientWithAuth: OkHttpClient): NavigationApi {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(httpClientWithAuth)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(NavigationApi::class.java)
     }
 }

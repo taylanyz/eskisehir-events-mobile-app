@@ -46,7 +46,7 @@ private val DarkColorScheme = darkColorScheme(
  */
 @Composable
 fun EskisehirEventsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,  // Always use light theme
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
