@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Eskişehir Etkinlikleri</string>
+    <string name="auth_already_have_account">Zaten Hesabın Var Mı?</string>
+    <string name="auth_email">E-posta</string>
+    <string name="auth_first_name">Ad</string>
+    <string name="auth_forgot_password">Şifremi Unuttum</string>
+    <string name="auth_invalid_email">Geçersiz e-posta adresi</string>
+    <string name="auth_last_name">Soyad</string>
+    <string name="auth_login">Giriş Yap</string>
+    <string name="auth_login_button">Giriş Yap</string>
+    <string name="auth_login_failed">Giriş başarısız. Lütfen bilgilerinizi kontrol edin</string>
+    <string name="auth_login_success">Başarıyla giriş yapıldı</string>
+    <string name="auth_logout">Çıkış Yap</string>
+    <string name="auth_no_account">Hesabın Yok Mu?</string>
+    <string name="auth_password">Şifre</string>
+    <string name="auth_password_confirm">Şifre Tekrar</string>
+    <string name="auth_password_short">Şifre en az 6 karakter olmalı</string>
+    <string name="auth_passwords_not_match">Şifreler eşleşmiyor</string>
+    <string name="auth_phone">Telefon Numarası</string>
+    <string name="auth_register">Kayıt Ol</string>
+    <string name="auth_register_button">Kayıt Ol</string>
+    <string name="auth_register_success">Kayıt başarılı. Lütfen giriş yapın</string>
+    <string name="cache_last_updated">Son güncelleme:</string>
+    <string name="cache_refresh">Yenile</string>
     <string msgid="881409763997275156" name="call_notification_answer_action">"Yanıtla"</string>
     <string msgid="8793775615905189152" name="call_notification_answer_video_action">"Video"</string>
     <string msgid="3229508546291798546" name="call_notification_decline_action">"Reddet"</string>
@@ -9,9 +32,88 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"Gelen arama süzülüyor"</string>
     <string msgid="406453423630273620" name="close_drawer">"Gezinme menüsünü kapat"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Sayfayı kapat"</string>
+    <string name="common_apply">Uygula</string>
+    <string name="common_back">Geri</string>
+    <string name="common_cancel">İptal</string>
+    <string name="common_close">Kapat</string>
+    <string name="common_continue">Devam Et</string>
+    <string name="common_delete">Sil</string>
+    <string name="common_edit">Düzenle</string>
+    <string name="common_empty_state">Veri Yok</string>
+    <string name="common_empty_state_desc">Bu alan şu anda boş</string>
+    <string name="common_error">Hata Oluştu</string>
+    <string name="common_filter">Filtrele</string>
+    <string name="common_finish">Bitir</string>
+    <string name="common_loading">Yükleniyor...</string>
+    <string name="common_next">İleri</string>
+    <string name="common_no_internet">İnternet Bağlantısı Yok</string>
+    <string name="common_offline">Çevrimdışı Mod</string>
+    <string name="common_ok">Tamam</string>
+    <string name="common_reset">Sıfırla</string>
+    <string name="common_save">Kaydet</string>
+    <string name="common_search">Ara</string>
+    <string name="common_success">Başarılı</string>
+    <string name="common_try_again">Tekrar Dene</string>
     <string msgid="8038256446254964252" name="default_error_message">"Geçersiz giriş"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Pop-up Pencere"</string>
+    <string name="discovery_category_all">Tümü</string>
+    <string name="discovery_category_cafe">Kafe</string>
+    <string name="discovery_category_museum">Müze</string>
+    <string name="discovery_category_park">Park</string>
+    <string name="discovery_category_restaurant">Restoran</string>
+    <string name="discovery_empty_state">Henüz mekan eklenmemiş</string>
+    <string name="discovery_filter">Filtrele</string>
+    <string name="discovery_no_results">Sonuç bulunamadı</string>
+    <string name="discovery_place_budget">Bütçe</string>
+    <string name="discovery_place_distance">Uzaklık</string>
+    <string name="discovery_place_duration">Tahmini Süre</string>
+    <string name="discovery_place_rating">Puan</string>
+    <string name="discovery_search_placeholder">Mekan ara...</string>
+    <string name="discovery_sort">Sırala</string>
+    <string name="discovery_sort_nearest">En Yakın</string>
+    <string name="discovery_sort_popular">Popüler</string>
+    <string name="discovery_sort_rating">En Yüksek Puan</string>
+    <string name="discovery_title">Mekanları Keşfet</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Açılır menü"</string>
+    <string name="error_invalid_input">Girdi geçersiz</string>
+    <string name="error_location_required">Konum izni gereklidir</string>
+    <string name="error_network">Ağ hatası. Lütfen tekrar deneyin</string>
+    <string name="error_no_data">Veri bulunamadı</string>
+    <string name="error_permission_denied">İzin reddedildi</string>
+    <string name="error_server">Sunucu hatası. Lütfen daha sonra deneyiniz</string>
+    <string name="error_timeout">İstek zaman aşımına uğradı</string>
+    <string name="error_unknown">Bilinmeyen hata oluştu</string>
+    <string name="feedback_cancel">İptal</string>
+    <string name="feedback_comment">Yorum</string>
+    <string name="feedback_comment_placeholder">Bize deneyiminiz hakkında anlatın...</string>
+    <string name="feedback_crowded_question">Kalabalık Mıydı?</string>
+    <string name="feedback_no">Hayır</string>
+    <string name="feedback_not_crowded">Boş</string>
+    <string name="feedback_rating">Puanı</string>
+    <string name="feedback_rating_1">Çok Kötü</string>
+    <string name="feedback_rating_2">Kötü</string>
+    <string name="feedback_rating_3">Orta</string>
+    <string name="feedback_rating_4">İyi</string>
+    <string name="feedback_rating_5">Çok İyi</string>
+    <string name="feedback_submit">Gönder</string>
+    <string name="feedback_submitted">Geri bildiriminiz kaydedildi, teşekkürler!</string>
+    <string name="feedback_subtitle">Bu rota hakkında bize bilgi verin</string>
+    <string name="feedback_title">Geri Bildirim</string>
+    <string name="feedback_very_crowded">Kalabalık</string>
+    <string name="feedback_visited">Ziyaret Ettiniz Mi?</string>
+    <string name="feedback_would_recommend">Tavsiye Ederim</string>
+    <string name="feedback_yes">Evet</string>
+    <string name="home_discover_places">Mekanları Keşfet</string>
+    <string name="home_featured">Öne Çıkanlar</string>
+    <string name="home_get_recommendations">Öneriler Al</string>
+    <string name="home_loading">Yükleniyor...</string>
+    <string name="home_my_routes">Rotalarım</string>
+    <string name="home_nearby">Yakınımda</string>
+    <string name="home_no_data">Henüz veri yok</string>
+    <string name="home_popular_today">Bugün Popüler</string>
+    <string name="home_quick_actions">Hızlı İşlemler</string>
+    <string name="home_title">Anasayfa</string>
+    <string name="home_welcome">Merhaba</string>
     <string msgid="6827826412747255547" name="in_progress">"Devam ediyor"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Kısmi olarak kontrol edildi"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"Alt sayfayı daralt"</string>
@@ -70,12 +172,119 @@
     <string msgid="6616362054113087709" name="m3c_time_picker_pm">"ÖS"</string>
     <string msgid="1805687647081129904" name="m3c_tooltip_long_press_label">"Araç ipucunu göster"</string>
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"İpucu"</string>
+    <string name="map_current_location">Mevcut Konum</string>
+    <string name="map_hide_route">Rotayı Gizle</string>
+    <string name="map_my_location">Benim Konumum</string>
+    <string name="map_show_route">Rotayı Göster</string>
+    <string name="map_title">Harita</string>
+    <string name="map_zoom_in">Yakınlaş</string>
+    <string name="map_zoom_out">Uzaklaş</string>
     <string msgid="542007171693138492" name="navigation_menu">"Gezinme menüsü"</string>
     <string msgid="6610465462668679431" name="not_selected">"Seçili değil"</string>
     <string msgid="875452955155264703" name="off">"Kapalı"</string>
+    <string name="offline_cached_data">Önceki verileri görüntülüyorsunuz</string>
+    <string name="offline_changes_will_sync">Bağlantı sağlandığında değişiklikler senkronize edilecektir</string>
+    <string name="offline_mode_desc">İnternet bağlantısı olmadan çalışıyorsunuz</string>
+    <string name="offline_mode_title">Çevrimdışı Mod</string>
     <string msgid="8655164131929253426" name="on">"Açık"</string>
+    <string name="onboarding_desc_1">Sizin ilgi alanlarınıza ve tercihlerinize göre özel rota önerileri alın</string>
+    <string name="onboarding_desc_2">Bütçeniz, zamanınız ve tercihlerinize uygun en iyi rotaları keşfedin</string>
+    <string name="onboarding_desc_3">Sistem sizin tercihlerinizden öğrenerek daha iyi öneriler sunar</string>
+    <string name="onboarding_desc_4">Eskişehir\'deki yerel işletmeleri keşfedin ve destekleyin</string>
+    <string name="onboarding_finish">Başla</string>
+    <string name="onboarding_next">İleri</string>
+    <string name="onboarding_skip">Atla</string>
+    <string name="onboarding_title_1">Kişiselleştirilmiş Öneriler</string>
+    <string name="onboarding_title_2">Dinamik Rota Planlama</string>
+    <string name="onboarding_title_3">Yapay Zeka Desteği</string>
+    <string name="onboarding_title_4">Yerel İşletmeleri Destekleyin</string>
+    <string name="onboarding_welcome">Hoş Geldiniz</string>
+    <string name="preferences_bike">Bisiklet</string>
+    <string name="preferences_budget">Bütçe</string>
+    <string name="preferences_budget_desc">Rota başına harcamak istediğiniz bütçe</string>
+    <string name="preferences_budget_high">Yüksek (500+ ₺)</string>
+    <string name="preferences_budget_low">Düşük (0-100 ₺)</string>
+    <string name="preferences_budget_medium">Orta (100-500 ₺)</string>
+    <string name="preferences_cafes">Kafeler</string>
+    <string name="preferences_car">Araba</string>
+    <string name="preferences_crowd">Kalabalık Toleransı</string>
+    <string name="preferences_crowd_high">Yüksek (canlı yerler)</string>
+    <string name="preferences_crowd_low">Düşük (sessiz yerler)</string>
+    <string name="preferences_crowd_medium">Orta</string>
+    <string name="preferences_cultural">Kültürel Mekanlar</string>
+    <string name="preferences_eco_friendly">Çevre Dostu</string>
+    <string name="preferences_historical">Tarihi Siteler</string>
+    <string name="preferences_interests">İlgi Alanları</string>
+    <string name="preferences_interests_desc">Hangi etkinlik ve mekanlardan hoşlanıyorsunuz?</string>
+    <string name="preferences_museums">Müzeler</string>
+    <string name="preferences_outdoor">Açık Hava Aktiviteleri</string>
+    <string name="preferences_parks">Parklar</string>
+    <string name="preferences_public_transport">Toplu Taşıma</string>
+    <string name="preferences_restaurants">Restoranlar</string>
+    <string name="preferences_save">Kaydet</string>
+    <string name="preferences_saved">Tercihleriniz kaydedildi</string>
+    <string name="preferences_sustainability">Sürdürülebilirlik</string>
+    <string name="preferences_sustainability_desc">Çevre dostu tercihleriniz</string>
+    <string name="preferences_title">Tercihlerinizi Ayarlayın</string>
+    <string name="preferences_transportation">Ulaşım Tercihi</string>
+    <string name="preferences_walking">Yürüme</string>
+    <string name="profile_about">Hakkında</string>
+    <string name="profile_account">Hesap</string>
+    <string name="profile_delete_account">Hesabı Sil</string>
+    <string name="profile_delete_account_warning">Hesabınız ve tüm verileri kalıcı olarak silinecektir</string>
+    <string name="profile_edit_preferences">Tercihleri Düzenle</string>
+    <string name="profile_email">E-posta</string>
+    <string name="profile_feedback_given">Verilen Geri Bildirim</string>
+    <string name="profile_language">Dil</string>
+    <string name="profile_logout">Çıkış Yap</string>
+    <string name="profile_name">Ad Soyad</string>
+    <string name="profile_notification_settings">Bildirim Ayarları</string>
+    <string name="profile_phone">Telefon</string>
+    <string name="profile_places_visited">Ziyaret Edilen Mekanlar</string>
+    <string name="profile_preferences">Tercihler</string>
+    <string name="profile_routes_completed">Tamamlanan Rotalar</string>
+    <string name="profile_routes_created">Oluşturulan Rotalar</string>
+    <string name="profile_settings">Ayarlar</string>
+    <string name="profile_statistics">İstatistikler</string>
+    <string name="profile_title">Profil</string>
     <string msgid="5941395253238309765" name="range_end">"Aralık sonu"</string>
     <string msgid="7097486360902471446" name="range_start">"Aralık başlangıcı"</string>
+    <string name="recommendations_add_to_route">Rotaya Ekle</string>
+    <string name="recommendations_generating">Öneriler oluşturuluyor...</string>
+    <string name="recommendations_match_score">Uyum: %d</string>
+    <string name="recommendations_no_data">Henüz öneri yok</string>
+    <string name="recommendations_reason_nearby">Yakınız</string>
+    <string name="recommendations_reason_popular">Popüler</string>
+    <string name="recommendations_reason_preference">Tercihlerinize uyar</string>
+    <string name="recommendations_reason_similar">Benzer mekanlar sevenler sevdi</string>
+    <string name="recommendations_save">Kaydet</string>
+    <string name="recommendations_share">Paylaş</string>
+    <string name="recommendations_similar">Benzer Öneriler</string>
+    <string name="recommendations_title">Öneriler</string>
+    <string name="recommendations_why">Neden önerildi?</string>
+    <string name="route_budget">Tahmini Bütçe</string>
+    <string name="route_crowd_level">Kalabalık Seviyesi</string>
+    <string name="route_distance">Toplam Mesafe</string>
+    <string name="route_duration">Toplam Süre</string>
+    <string name="route_estimated_arrival">Tahmini Varış</string>
+    <string name="route_itinerary">Detaylı Tur</string>
+    <string name="route_places_count">Mekan Sayısı</string>
+    <string name="route_save">Kaydet</string>
+    <string name="route_share">Paylaş</string>
+    <string name="route_start">Başla</string>
+    <string name="route_start_navigation">Navigasyonu Başlat</string>
+    <string name="route_step">Adım</string>
+    <string name="route_sustainability_score">Sürdürülebilirlik Puanı</string>
+    <string name="route_title">Rota Detayları</string>
+    <string name="route_via">Üzerinden</string>
+    <string name="saved_routes_delete">Sil</string>
+    <string name="saved_routes_delete_cancel">İptal</string>
+    <string name="saved_routes_delete_confirm">Sil</string>
+    <string name="saved_routes_delete_confirmation">Bu rotayı silmek istediğinizden emin misiniz?</string>
+    <string name="saved_routes_edit">Düzenle</string>
+    <string name="saved_routes_empty">Henüz kayıtlı rota yok</string>
+    <string name="saved_routes_title">Kayıtlı Rotalar</string>
+    <string name="saved_routes_visit_date">Ziyaret Tarihi</string>
     <string msgid="6043586758067023" name="selected">"Seçili"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="2561197295334830845" name="switch_role">"Anahtar"</string>
@@ -83,4 +292,8 @@
     <string msgid="5946805113151406391" name="template_percent">"Yüzde <ns1:g id="PERCENTAGE">%1$d</ns1:g>."</string>
     <string msgid="3765533235322692011" name="tooltip_description">"ipucu"</string>
     <string msgid="3124740595719787496" name="tooltip_label">"ipucunu göster"</string>
+    <string name="validation_email_invalid">Geçersiz e-posta adresi</string>
+    <string name="validation_password_short">Şifre en az 6 karakter olmalı</string>
+    <string name="validation_phone_invalid">Geçersiz telefon numarası</string>
+    <string name="validation_required">Bu alan zorunludur</string>
 </resources>

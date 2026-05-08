@@ -17,12 +17,13 @@
     <uses-permission android:name="com.eskisehir.eventapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
-        android:name="com.eskisehir.events.EskisehirEventsApp"
+        android:name="com.eskisehir.eventapp.EskisehirEventsApp"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:extractNativeLibs="false"
         android:label="Eskişehir Events"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar" >

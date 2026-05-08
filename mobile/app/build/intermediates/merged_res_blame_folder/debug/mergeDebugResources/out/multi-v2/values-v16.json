@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.eskisehir.eventapp-mergeDebugResources-2:/values-v16/values-v16.xml",
+            "outputFile": "com.eskisehir.eventapp-mergeDebugResources-64:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\tako0\\.gradle\\caches\\transforms-4\\1276092c155aa6db7e8ab29ac64d58f0\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
+                    "source": "/Users/ardarenda/.gradle/caches/8.12/transforms/f6d9e9fd9910a68e482a6f455123e7c8/transformed/core-1.12.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
