@@ -18,9 +18,23 @@ class ProfileRepository @Inject constructor(
         userProfileDAO.getUserProfile(userId)
 
     suspend fun saveInterestAreas(userId: String, interests: List<String>) {
+        val existing = userProfileDAO.getUserProfileOnce(userId)
         val json = gson.toJson(interests)
         userProfileDAO.upsertUserProfile(
-            UserProfileEntity(userId = userId, interestAreas = json)
+            (existing ?: UserProfileEntity(userId = userId)).copy(
+                interestAreas = json,
+                updatedAt = System.currentTimeMillis()
+            )
+        )
+    }
+
+    suspend fun saveProfileImageUri(userId: String, uri: String) {
+        val existing = userProfileDAO.getUserProfileOnce(userId)
+        userProfileDAO.upsertUserProfile(
+            (existing ?: UserProfileEntity(userId = userId)).copy(
+                profileImageUri = uri,
+                updatedAt = System.currentTimeMillis()
+            )
         )
     }
 

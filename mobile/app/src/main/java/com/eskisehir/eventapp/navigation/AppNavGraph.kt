@@ -20,16 +20,13 @@ import com.eskisehir.eventapp.ui.screens.detail.EventDetailScreen
 import com.eskisehir.eventapp.ui.screens.explore.ExploreScreen
 import com.eskisehir.eventapp.ui.screens.favorites.FavoritesScreen
 import com.eskisehir.eventapp.ui.screens.home.HomeScreen
+import com.eskisehir.eventapp.ui.screens.profile.EditProfileScreen
 import com.eskisehir.eventapp.ui.screens.profile.ProfileScreen
 import com.eskisehir.eventapp.ui.screens.recommendations.RecommendationsScreen
 import com.eskisehir.eventapp.ui.screens.route.RouteGeneratorScreen
 import com.eskisehir.eventapp.ui.screens.route.RouteDetailScreen
 import com.eskisehir.eventapp.ui.screens.route.NavigationScreen
 
-/**
- * Main app navigation graph for authenticated users.
- * Contains Home, Explore, Recommendations, Favorites, Profile, and detail screens.
- */
 fun NavGraphBuilder.appNavGraph(navController: NavHostController) {
     composable("app") {
         AppShell()
@@ -42,40 +39,45 @@ private fun AppShell() {
     val navBackStackEntry by appNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val bottomNavRoutes = setOf(
+        Screen.Home.route, Screen.Explore.route, Screen.Recommendations.route,
+        Screen.Favorites.route, Screen.Profile.route
+    )
+
     val screenLabels = mapOf(
-        "home" to "Anasayfa",
-        "explore" to "Keşfet",
-        "recommendations" to "Öneriler",
-        "favorites" to "Favoriler",
-        "profile" to "Profil"
+        "home"            to "Anasayfa",
+        "explore"         to "Kesf et",
+        "recommendations" to "Oneriler",
+        "favorites"       to "Favoriler",
+        "profile"         to "Profil"
     )
 
     val bottomNavItems = listOf(
-        Screen.Home to Icons.Default.Home,
-        Screen.Explore to Icons.Default.Explore,
+        Screen.Home            to Icons.Default.Home,
+        Screen.Explore         to Icons.Default.Explore,
         Screen.Recommendations to Icons.Default.Star,
-        Screen.Favorites to Icons.Default.Favorite,
-        Screen.Profile to Icons.Default.Person
+        Screen.Favorites       to Icons.Default.Favorite,
+        Screen.Profile         to Icons.Default.Person
     )
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                bottomNavItems.forEach { (screen, icon) ->
-                    NavigationBarItem(
-                        icon = { Icon(icon, contentDescription = screen.route) },
-                        label = { Text(screenLabels[screen.route] ?: screen.route) },
-                        selected = currentDestination?.route == screen.route,
-                        onClick = {
-                            appNavController.navigate(screen.route) {
-                                popUpTo(appNavController.graph.findStartDestination().id) {
-                                    saveState = true
+            if (currentDestination?.route in bottomNavRoutes) {
+                NavigationBar {
+                    bottomNavItems.forEach { (screen, icon) ->
+                        NavigationBarItem(
+                            icon = { Icon(icon, contentDescription = screen.route) },
+                            label = { Text(screenLabels[screen.route] ?: screen.route) },
+                            selected = currentDestination?.route == screen.route,
+                            onClick = {
+                                appNavController.navigate(screen.route) {
+                                    popUpTo(appNavController.graph.findStartDestination().id) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
@@ -104,11 +106,21 @@ private fun AppShell() {
                 FavoritesScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen(onLogoutSuccess = {
-                    appNavController.navigate("auth") {
-                        popUpTo("app") { inclusive = true }
+                ProfileScreen(
+                    onLogoutSuccess = {
+                        appNavController.navigate("auth") {
+                            popUpTo("app") { inclusive = true }
+                        }
+                    },
+                    onEditProfileClick = {
+                        appNavController.navigate(Screen.EditProfile.route)
                     }
-                })
+                )
+            }
+            composable(Screen.EditProfile.route) {
+                EditProfileScreen(
+                    onBackClick = { appNavController.popBackStack() }
+                )
             }
             composable(
                 route = Screen.EventDetail.route,
@@ -125,11 +137,7 @@ private fun AppShell() {
                 arguments = listOf(navArgument("eventIds") { type = NavType.StringType })
             ) { backStackEntry ->
                 val eventIdsString = backStackEntry.arguments?.getString("eventIds") ?: ""
-                val eventIds = if (eventIdsString.isNotEmpty()) {
-                    eventIdsString.split(",").map { it.toLong() }
-                } else {
-                    emptyList()
-                }
+                val eventIds = if (eventIdsString.isNotEmpty()) eventIdsString.split(",").map { it.toLong() } else emptyList()
                 RouteGeneratorScreen(
                     selectedEventIds = eventIds,
                     onRouteGenerated = {
@@ -142,15 +150,9 @@ private fun AppShell() {
             }
             composable(Screen.RouteDetail.route) {
                 RouteDetailScreen(
-                    onBackClick = {
-                        appNavController.popBackStack()
-                    },
-                    onPoiClick = { poiId ->
-                        appNavController.navigate(Screen.EventDetail.createRoute(poiId))
-                    },
-                    onStartNavigation = { eventIds ->
-                        appNavController.navigate(Screen.Navigation.createRoute(eventIds))
-                    }
+                    onBackClick = { appNavController.popBackStack() },
+                    onPoiClick = { poiId -> appNavController.navigate(Screen.EventDetail.createRoute(poiId)) },
+                    onStartNavigation = { eventIds -> appNavController.navigate(Screen.Navigation.createRoute(eventIds)) }
                 )
             }
             composable(
@@ -158,11 +160,7 @@ private fun AppShell() {
                 arguments = listOf(navArgument("eventIds") { type = NavType.StringType })
             ) { backStackEntry ->
                 val eventIdsString = backStackEntry.arguments?.getString("eventIds") ?: ""
-                val eventIds = if (eventIdsString.isNotEmpty()) {
-                    eventIdsString.split(",").map { it.toLong() }
-                } else {
-                    emptyList()
-                }
+                val eventIds = if (eventIdsString.isNotEmpty()) eventIdsString.split(",").map { it.toLong() } else emptyList()
                 NavigationScreen(
                     eventIds = eventIds,
                     onBackClick = { appNavController.popBackStack() }

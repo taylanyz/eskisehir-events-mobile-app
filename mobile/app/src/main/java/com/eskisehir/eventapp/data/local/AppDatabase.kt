@@ -12,14 +12,25 @@ import com.eskisehir.eventapp.data.local.dao.POIDAO
 import com.eskisehir.eventapp.data.local.dao.CommentDAO
 import com.eskisehir.eventapp.data.local.dao.UserEventDAO
 import com.eskisehir.eventapp.data.local.dao.UserProfileDAO
+import com.eskisehir.eventapp.data.local.dao.FavoriteEventDAO
+import com.eskisehir.eventapp.data.local.dao.FavoritePlaceDAO
 import com.eskisehir.eventapp.data.local.converters.POIConverters
 import com.eskisehir.eventapp.data.local.entity.CommentEntity
 import com.eskisehir.eventapp.data.local.entity.UserEventEntity
 import com.eskisehir.eventapp.data.local.entity.UserProfileEntity
+import com.eskisehir.eventapp.data.local.entity.FavoriteEventEntity
+import com.eskisehir.eventapp.data.local.entity.FavoritePlaceEntity
 
 @Database(
-    entities = [POI::class, CommentEntity::class, UserEventEntity::class, UserProfileEntity::class],
-    version = 2,
+    entities = [
+        POI::class,
+        CommentEntity::class,
+        UserEventEntity::class,
+        UserProfileEntity::class,
+        FavoriteEventEntity::class,
+        FavoritePlaceEntity::class
+    ],
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(POIConverters::class)
@@ -29,6 +40,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun commentDAO(): CommentDAO
     abstract fun userEventDAO(): UserEventDAO
     abstract fun userProfileDAO(): UserProfileDAO
+    abstract fun favoriteEventDAO(): FavoriteEventDAO
+    abstract fun favoritePlaceDAO(): FavoritePlaceDAO
 
     companion object {
         @Volatile
@@ -45,6 +58,19 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Add profileImageUri column to user_profile
+                database.execSQL("ALTER TABLE `user_profile` ADD COLUMN `profileImageUri` TEXT NOT NULL DEFAULT ''")
+                // Create favorite_events table
+                database.execSQL("CREATE TABLE IF NOT EXISTS `favorite_events` (`userId` TEXT NOT NULL, `eventId` INTEGER NOT NULL, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`userId`, `eventId`))")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_favorite_events_userId` ON `favorite_events` (`userId`)")
+                // Create favorite_places table
+                database.execSQL("CREATE TABLE IF NOT EXISTS `favorite_places` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `placeId` TEXT NOT NULL, `placeName` TEXT NOT NULL, `placeAddress` TEXT NOT NULL, `placeCategory` TEXT NOT NULL, `addedAt` INTEGER NOT NULL)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_favorite_places_userId` ON `favorite_places` (`userId`)")
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase =
             instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
@@ -55,7 +81,7 @@ abstract class AppDatabase : RoomDatabase() {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "eskisehir-events.db"
-            ).addMigrations(MIGRATION_1_2).build()
+            ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
         }
     }
 }

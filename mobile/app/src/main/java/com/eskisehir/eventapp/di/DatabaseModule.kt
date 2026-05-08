@@ -3,14 +3,8 @@ package com.eskisehir.eventapp.di
 import android.content.Context
 import androidx.room.Room
 import com.eskisehir.eventapp.data.local.AppDatabase
-import com.eskisehir.eventapp.data.local.dao.POIDAO
-import com.eskisehir.eventapp.data.local.dao.CommentDAO
-import com.eskisehir.eventapp.data.local.dao.UserEventDAO
-import com.eskisehir.eventapp.data.local.dao.UserProfileDAO
-import com.eskisehir.eventapp.data.repository.EventInteractionRepository
-import com.eskisehir.eventapp.data.repository.POIRepository
-import com.eskisehir.eventapp.data.repository.POIRepositoryImpl
-import com.eskisehir.eventapp.data.repository.ProfileRepository
+import com.eskisehir.eventapp.data.local.dao.*
+import com.eskisehir.eventapp.data.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,39 +23,32 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "eskisehir-events.db"
-        ).addMigrations(AppDatabase.MIGRATION_1_2).build()
+        ).addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3).build()
     }
 
-    @Singleton
-    @Provides
-    fun providePOIDAO(database: AppDatabase): POIDAO = database.poiDAO()
+    @Singleton @Provides fun providePOIDAO(db: AppDatabase): POIDAO = db.poiDAO()
+    @Singleton @Provides fun provideCommentDAO(db: AppDatabase): CommentDAO = db.commentDAO()
+    @Singleton @Provides fun provideUserEventDAO(db: AppDatabase): UserEventDAO = db.userEventDAO()
+    @Singleton @Provides fun provideUserProfileDAO(db: AppDatabase): UserProfileDAO = db.userProfileDAO()
+    @Singleton @Provides fun provideFavoriteEventDAO(db: AppDatabase): FavoriteEventDAO = db.favoriteEventDAO()
+    @Singleton @Provides fun provideFavoritePlaceDAO(db: AppDatabase): FavoritePlaceDAO = db.favoritePlaceDAO()
 
-    @Singleton
-    @Provides
-    fun provideCommentDAO(database: AppDatabase): CommentDAO = database.commentDAO()
-
-    @Singleton
-    @Provides
-    fun provideUserEventDAO(database: AppDatabase): UserEventDAO = database.userEventDAO()
-
-    @Singleton
-    @Provides
-    fun provideUserProfileDAO(database: AppDatabase): UserProfileDAO = database.userProfileDAO()
-
-    @Singleton
-    @Provides
+    @Singleton @Provides
     fun providePOIRepository(poiDAO: POIDAO): POIRepository = POIRepositoryImpl(poiDAO)
 
-    @Singleton
-    @Provides
+    @Singleton @Provides
     fun provideEventInteractionRepository(
         commentDAO: CommentDAO,
         userEventDAO: UserEventDAO
     ): EventInteractionRepository = EventInteractionRepository(commentDAO, userEventDAO)
 
-    @Singleton
-    @Provides
-    fun provideProfileRepository(
-        userProfileDAO: UserProfileDAO
-    ): ProfileRepository = ProfileRepository(userProfileDAO)
+    @Singleton @Provides
+    fun provideProfileRepository(userProfileDAO: UserProfileDAO): ProfileRepository =
+        ProfileRepository(userProfileDAO)
+
+    @Singleton @Provides
+    fun provideFavoritesRepository(
+        favoriteEventDAO: FavoriteEventDAO,
+        favoritePlaceDAO: FavoritePlaceDAO
+    ): FavoritesRepository = FavoritesRepository(favoriteEventDAO, favoritePlaceDAO)
 }

@@ -19,6 +19,7 @@ import com.eskisehir.eventapp.data.local.entity.CommentEntity
 import com.eskisehir.eventapp.data.model.SampleData
 import com.eskisehir.eventapp.data.model.UserEventStatus
 import com.eskisehir.eventapp.ui.viewmodel.EventInteractionViewModel
+import com.eskisehir.eventapp.ui.viewmodel.FavoritesViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,15 +28,18 @@ import java.util.*
 fun EventDetailScreen(eventId: Long, onBackClick: () -> Unit) {
     val event = SampleData.events.find { it.id == eventId }
     val viewModel: EventInteractionViewModel = hiltViewModel()
+    val favoritesViewModel: FavoritesViewModel = hiltViewModel()
 
     val comments by viewModel.comments.collectAsState()
     val currentStatus by viewModel.currentEventStatus.collectAsState()
     val commentText by viewModel.commentText.collectAsState()
     val currentUserId by viewModel.userId.collectAsState()
+    val isFavorite by favoritesViewModel.isFavorite.collectAsState()
 
     LaunchedEffect(eventId) {
         viewModel.loadCommentsForEvent(eventId)
         viewModel.loadStatusForEvent(eventId)
+        favoritesViewModel.loadFavoriteState(eventId)
     }
 
     Scaffold(
@@ -45,6 +49,16 @@ fun EventDetailScreen(eventId: Long, onBackClick: () -> Unit) {
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { favoritesViewModel.toggleFavorite(eventId) }) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = if (isFavorite) "Favorilerden cikar" else "Favorilere ekle",
+                            tint = if (isFavorite) MaterialTheme.colorScheme.error
+                                   else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -112,7 +126,6 @@ fun EventDetailScreen(eventId: Long, onBackClick: () -> Unit) {
                 HorizontalDivider()
                 Spacer(Modifier.height(16.dp))
 
-                // Etkinlik Durumu
                 Text(
                     "Bu Etkinlik Icin Durumun",
                     style = MaterialTheme.typography.titleMedium,
@@ -145,7 +158,6 @@ fun EventDetailScreen(eventId: Long, onBackClick: () -> Unit) {
                 HorizontalDivider()
                 Spacer(Modifier.height(16.dp))
 
-                // Yorumlar
                 Text(
                     "Yorumlar (${comments.size})",
                     style = MaterialTheme.typography.titleMedium,

@@ -9,6 +9,9 @@ interface UserProfileDAO {
     @Query("SELECT * FROM user_profile WHERE userId = :userId LIMIT 1")
     fun getUserProfile(userId: String): Flow<UserProfileEntity?>
 
+    @Query("SELECT * FROM user_profile WHERE userId = :userId LIMIT 1")
+    suspend fun getUserProfileOnce(userId: String): UserProfileEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertUserProfile(entity: UserProfileEntity)
 }
