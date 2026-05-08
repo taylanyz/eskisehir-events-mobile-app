@@ -1,19 +1,13 @@
 package com.eskisehir.eventapp.data.local
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eskisehir.eventapp.data.model.AuthResponse
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-/**
- * Unit tests for TokenManager.
- * Tests token storage and retrieval operations.
- */
 class TokenManagerTest {
 
     private lateinit var tokenStore: TokenStore
@@ -26,8 +20,7 @@ class TokenManagerTest {
     }
 
     @Test
-    fun testSaveTokens() {
-        // Arrange
+    fun testSaveTokens() = runBlocking {
         val authResponse = AuthResponse(
             accessToken = "access_123",
             refreshToken = "refresh_123",
@@ -35,13 +28,10 @@ class TokenManagerTest {
             email = "user@test.com",
             displayName = "Test User"
         )
-
         coEvery { tokenStore.saveTokens(any(), any(), any(), any(), any()) } returns Unit
 
-        // Act
         tokenManager.saveTokens(authResponse)
 
-        // Assert
         coVerify {
             tokenStore.saveTokens(
                 authResponse.accessToken,
@@ -54,28 +44,21 @@ class TokenManagerTest {
     }
 
     @Test
-    fun testUpdateAccessToken() {
-        // Arrange
+    fun testUpdateAccessToken() = runBlocking {
         val newToken = "new_access_token"
-
         coEvery { tokenStore.updateAccessToken(newToken) } returns Unit
 
-        // Act
         tokenManager.updateAccessToken(newToken)
 
-        // Assert
         coVerify { tokenStore.updateAccessToken(newToken) }
     }
 
     @Test
-    fun testClearTokens() {
-        // Arrange
+    fun testClearTokens() = runBlocking {
         coEvery { tokenStore.clearTokens() } returns Unit
 
-        // Act
         tokenManager.clearTokens()
 
-        // Assert
         coVerify { tokenStore.clearTokens() }
     }
 }

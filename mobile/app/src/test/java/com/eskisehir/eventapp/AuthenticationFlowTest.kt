@@ -1,7 +1,7 @@
 package com.eskisehir.eventapp
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.eskisehir.eventapp.data.local.TokenManager
-import com.eskisehir.eventapp.data.model.AuthResponse
 import com.eskisehir.eventapp.data.remote.AuthApi
 import com.eskisehir.eventapp.data.remote.UserApi
 import com.eskisehir.eventapp.domain.usecase.LoginUseCase
@@ -20,14 +20,18 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import com.eskisehir.eventapp.domain.Result
 
 /**
  * End-to-end authentication flow test.
- * Tests complete user journey: Register → Login → GetUser → Logout
+ * Tests complete user journey: Register -> Login -> GetUser -> Logout
  */
 class AuthenticationFlowTest {
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 

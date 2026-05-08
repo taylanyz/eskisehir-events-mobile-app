@@ -5,20 +5,14 @@ import com.eskisehir.eventapp.data.model.AuthResponse
 import com.eskisehir.eventapp.data.model.RefreshTokenRequest
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.junit.Before
 import org.junit.Test
 
-/**
- * Unit tests for AuthInterceptor.
- * Tests token injection and 401 refresh logic.
- */
 class AuthInterceptorTest {
 
     private lateinit var tokenManager: TokenManager
@@ -34,7 +28,6 @@ class AuthInterceptorTest {
 
     @Test
     fun testInterceptorAddsAuthorizationHeader() {
-        // Arrange
         val accessToken = "test_token_123"
         val originalRequest = mockk<Request>(relaxed = true)
         val requestWithToken = mockk<Request>(relaxed = true)
@@ -52,23 +45,20 @@ class AuthInterceptorTest {
             }
         }
 
-        // Act
         val result = interceptor.intercept(chain)
 
-        // Assert
         assert(result == response)
         coVerify { originalRequest.newBuilder() }
     }
 
     @Test
     fun testInterceptorHandles401Response() {
-        // Arrange
         val newAccessToken = "new_token_456"
         val refreshToken = "refresh_token_789"
         val originalRequest = mockk<Request>(relaxed = true)
         val response401 = mockk<Response> {
             every { code } returns 401
-            coEvery { close() } returns Unit
+            every { close() } returns Unit
         }
         val successResponse = mockk<Response> {
             every { code } returns 200
@@ -84,7 +74,7 @@ class AuthInterceptorTest {
 
         val chain = mockk<Interceptor.Chain> {
             coEvery { request() } returns originalRequest
-            coEvery { proceed(originalRequest) } returns response401 andThen successResponse
+            coEvery { proceed(any()) } returns response401 andThen successResponse
         }
 
         coEvery { tokenManager.getAccessToken() } returns "old_token"
@@ -92,10 +82,8 @@ class AuthInterceptorTest {
         coEvery { authApi.refreshToken(RefreshTokenRequest(refreshToken)) } returns authResponse
         coEvery { tokenManager.updateAccessToken(newAccessToken) } returns Unit
 
-        // Act
-        val result = interceptor.intercept(chain)
+        interceptor.intercept(chain)
 
-        // Assert
         coVerify { authApi.refreshToken(any()) }
         coVerify { tokenManager.updateAccessToken(newAccessToken) }
     }
